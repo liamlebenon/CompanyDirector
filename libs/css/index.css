@@ -1,0 +1,14 @@
+body {
+    max-height: 100vh;
+    background-image: url('../../images/background.jpg');
+    background-size:cover;
+}
+
+.navbar {
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+}
+.nav-item {
+    padding-left: 5rem;
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1">  
+        <link rel="stylesheet" href="./bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="./libs/css/index.css" />
+        <title>Company Director</title>  
+    </head>
+    <body>
+        
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="container">
+              <a class="navbar-brand" id="companyLogoButton" href="#">
+                <h2>Company Director</h2>
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto">
+                  <li class="nav-item">
+                    <a class="nav-link" aria-current="page" id="searchButton" href="#">Search</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" id="createButton">Create</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+        </nav>
+        <!-- End of Navbar -->
+
+        <!-- View all users box (default view) -->
+        <section class="vh-100" id="allEmployeesBox">
+          <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-lg-8 col-xl-8">
+                <div class="card text-black" style="border-radius: 25px;">
+                  <div class="card-body p-md-5">
+                    <div class="row justify-content-center">
+                      <div class="col-md-12 col-lg-10 col-xl-10 order-2 order-lg-1">
+        
+                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">All Employees</p>
+                          <div id="table">
+                            <table id="dtBasicExample" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                              <thead>
+                                <tr>
+                                  <th class="th-sm">Name
+                                  </th>
+                                  <th class="th-sm">Location
+                                  </th>
+                                  <th class="th-sm">Position
+                                  </th>
+                                  <!-- <th class="th-sm">Contact
+                                  </th> -->
+                                </tr>
+                              </thead>
+                              <tbody id="tableBody">
+                              </tbody>
+                            </table>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </section>
+
+        <!-- Create new user box -->
+        <section class="vh-100" id="createNewUserBox" style="display: none">
+            <div class="container h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-12 col-xl-8">
+                  <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                      <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+          
+                          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create a User</p>
+          
+                          <form class="mx-1 mx-md-6" method="POST" id="createNewUserForm">
+          
+                            <div class="d-flex flex-row align-items-center mb-4">
+                              <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                              <div class="form-outline flex-fill mb-0">
+                                <input type="text" id="userFirstName" class="form-control" name="firstName" required />
+                                <label class="form-label" for="form3Example1c">First Name</label>
+                              </div>
+                              &nbsp;
+                              <div class="form-outline flex-fill mb-0">
+                                <input type="text" id="userLastName" class="form-control" name="lastName" required />
+                                <label class="form-label" for="form3Example1c">Last Name</label>
+                              </div>
+                            </div>
+          
+                            <div class="d-flex flex-row align-items-center mb-4">
+                              <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                              <div class="form-outline flex-fill mb-0">
+                                <input type="email" id="userEmail" class="form-control" name="email" required />
+                                <label class="form-label" for="form3Example3c">Email Address</label>
+                              </div>
+                            </div>
+          
+                            <div class="d-flex flex-row align-items-center mb-4">
+                              <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                              <div class="form-outline flex-fill mb-0">
+                                <select id="userDepartment" class="form-select" name="departmentID" required >
+                                    <option selected disabled>Select Department</option>
+                                </select>
+                              </div>
+                            </div>
+          
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                              <button type="submit" id="createNewUserButton" class="btn btn-primary btn-lg">Create New User</button>
+                            </div>
+          
+                          </form>
+          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </section>
+        <!-- End of create new user box -->
+
+
+
+
+        <script type="application/javascript" src="./libs/js/jquery-2.2.3.min.js"></script>
+        <script src="./bootstrap/js/bootstrap.js"></script>
+        <script type="application/javascript" src="./libs/js/index.js"></script>
+    </body>
+</html>
