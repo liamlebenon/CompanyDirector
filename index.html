@@ -21,10 +21,10 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" id="searchButton" href="#">Search</a>
+                    <a class="nav-link" aria-current="page" id="employeesButton" href="#"><b>Employees</b></a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#" id="createButton">Create</a>
+                    <a class="nav-link" href="#" id="createButton"><b>Create</b></a>
                   </li>
                 </ul>
               </div>
@@ -36,13 +36,13 @@
         <section class="vh-100" id="allEmployeesBox">
           <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-lg-8 col-xl-8">
+              <div class="col-lg-8 col-xl-10">
                 <div class="card text-black" style="border-radius: 25px;">
-                  <div class="card-body p-md-5">
+                  <div class="card-body p-md-4">
                     <div class="row justify-content-center">
-                      <div class="col-md-12 col-lg-10 col-xl-10 order-2 order-lg-1">
+                      <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
         
-                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">All Employees</p>
+                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Employees</p>
                         <div class="input-group">
                           <div class="form-outline">
                             <input type="search" id="searchTable" placeholder="Search table..."class="form-control" />
@@ -52,17 +52,18 @@
                             <table id="employeeTable" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
                               <thead>
                                 <tr>
-                                  <th class="th-sm">Name
+                                  <th class="th-sm col-md-3">Name
                                   </th>
-                                  <th class="th-sm">Location
+                                  <th class="th-sm col-md-1">Location
                                   </th>
-                                  <th class="th-sm">Position
+                                  <th class="th-sm col-md-3">Position
                                   </th>
                                 </tr>
                               </thead>
                               <tbody id="tableBody">
                               </tbody>
                             </table>
+                            <footer>Total Employees: <span id="employeeCount"></span></footer>
                           </div>
                       </div>
                     </div>
@@ -73,65 +74,158 @@
           </div>
       </section>
 
-        <!-- Create new user box -->
-        <section class="vh-100" id="createNewUserBox" style="display: none">
-            <div class="container h-100">
-              <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-lg-12 col-xl-8">
-                  <div class="card text-black" style="border-radius: 25px;">
-                    <div class="card-body p-md-5">
-                      <div class="row justify-content-center">
-                        <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-          
-                          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create a User</p>
-          
-                          <form class="mx-1 mx-md-6" method="POST" id="createNewUserForm">
-          
-                            <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                              <div class="form-outline flex-fill mb-0">
-                                <input type="text" id="userFirstName" class="form-control" name="firstName" required />
-                                <label class="form-label" for="form3Example1c">First Name</label>
-                              </div>
-                              &nbsp;
-                              <div class="form-outline flex-fill mb-0">
-                                <input type="text" id="userLastName" class="form-control" name="lastName" required />
-                                <label class="form-label" for="form3Example1c">Last Name</label>
-                              </div>
+      <!-- Create new user box -->
+      <section class="vh-100" id="createNewUserBox" style="display: none">
+          <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+              <div class="col-lg-12 col-xl-8">
+                <div class="card text-black" style="border-radius: 25px;">
+                  <div class="card-body p-md-5">
+                    <div class="row justify-content-center">
+                      <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
+        
+                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Add Employee</p>
+        
+                        <form class="mx-1 mx-md-6" method="POST" id="createNewUserForm">
+        
+                          <div class="d-flex flex-row align-items-center mb-4">
+                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                              <input type="text" id="userFirstName" class="form-control" name="firstName" required />
+                              <label class="form-label" for="form3Example1c"><b>First Name</b></label>
                             </div>
-          
-                            <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                              <div class="form-outline flex-fill mb-0">
-                                <input type="email" id="userEmail" class="form-control" name="email" required />
-                                <label class="form-label" for="form3Example3c">Email Address</label>
-                              </div>
+                            &nbsp;
+                            <div class="form-outline flex-fill mb-0">
+                              <input type="text" id="userLastName" class="form-control" name="lastName" required />
+                              <label class="form-label" for="form3Example1c"><b>Last Name</b></label>
                             </div>
-          
-                            <div class="d-flex flex-row align-items-center mb-4">
-                              <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                              <div class="form-outline flex-fill mb-0">
-                                <select id="userDepartment" class="form-select" name="departmentID" required >
-                                    <option selected disabled>Select Department</option>
-                                </select>
-                              </div>
+                          </div>
+        
+                          <div class="d-flex flex-row align-items-center mb-4">
+                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                              <input type="email" id="userEmail" class="form-control" name="email" required />
+                              <label class="form-label" for="form3Example3c"><b>Email Address</b></label>
                             </div>
-          
-                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                              <button type="submit" id="createNewUserButton" class="btn btn-primary btn-lg">Create New User</button>
+                          </div>
+        
+                          <div class="d-flex flex-row align-items-center mb-4">
+                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                              <select id="userDepartment" class="form-select" name="departmentID" required >
+                                  <option selected disabled><b>Select Department</b></option>
+                              </select>
                             </div>
-          
-                          </form>
-          
-                        </div>
+                          </div>
+        
+                          <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                            <button type="submit" id="createNewUserButton" class="btn btn-primary btn-lg">Create Employee</button>
+                          </div>
+        
+                        </form>
+        
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-        </section>
-        <!-- End of create new user box -->
+          </div>
+      </section>
+      <!-- End of create new user box -->
+
+      <!-- Start of Employee Information box -->
+      <section class="vh-100" id="employeeInfoBox" style="display: none;">
+        <div class="container h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8 col-xl-10">
+              <div class="card text-black" style="border-radius: 25px;">
+                <div class="card-body p-md-4">
+                  <div class="row justify-content-center">
+                    <div class="col-md-12 col-lg-10 col-xl-12 order-1 order-lg-1">
+                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Employee Details</p>
+                      <div class="col-lg-12 mb-4 mb-sm-5">
+                      <div class="card card-style1 border-0">
+                          <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7" id="employeeDetails">
+                              <div class="row align-items-center">
+                                  <div class="col-lg-6 mb-4 mb-lg-0" id="profileImage">
+                                      <img src="./images/profileImage.png" width="250px" alt="...">
+                                  </div>
+                                  <div class="col-lg-6 px-xl-10">
+                                      <div class="employeeName">
+                                          <h3 class="h2 text-black mb-0" class="employeeDetails" id="employeeName"></h3>
+                                      </div>
+                                      <ul class="list-unstyled mb-1-9">
+                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Position: &nbsp;</b><span id="employeePosition" class="employeeDetails"></span></span></li>
+                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Email: &nbsp;</b><span id="employeeEmail" class="employeeDetails"></span></span></li>
+                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Location: &nbsp;</b><span id="employeeLocation" class="employeeDetails"></span></span></li>
+                                      </ul>
+                                      <button type="button" id="editEmployee" class="btn btn-primary">Edit Employee</button>
+                                      <button type="button" id="deleteEmployee" class="btn btn-danger">Delete Employee</button>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <!-- Edit Employee Form -->
+                          <div class="row justify-content-center" id="editEmployeeForm" style="display: none;">
+                            <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
+
+                              <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Employee</p>
+                            
+                              <form class="mx-1 mx-md-6" method="POST" id="editEmployeeBox">
+                              
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                  <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                  <div class="form-outline flex-fill mb-0">
+                                    <input type="text" id="editFirstName" class="form-control" name="editFirstName" required />
+                                    <label class="form-label" for="form3Example1c"><b>First Name</b></label>
+                                  </div>
+                                  &nbsp;
+                                  <div class="form-outline flex-fill mb-0">
+                                    <input type="text" id="editLastName" class="form-control" name="editLastName" required />
+                                    <label class="form-label" for="form3Example1c"><b>Last Name</b></label>
+                                  </div>
+                                </div>
+                              
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                  <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                  <div class="form-outline flex-fill mb-0">
+                                    <input type="email" id="editEmail" class="form-control" name="editEmail" required />
+                                    <label class="form-label" for="form3Example3c"><b>Email Address</b></label>
+                                  </div>
+                                </div>
+                              
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                  <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                  <div class="form-outline flex-fill mb-0">
+                                    <select id="editDepartment" class="form-select" name="editDepartmentID" required >
+                                        <option selected id="initialDepartment"><b></b></option>
+                                    </select>
+                                  </div>
+                                </div>
+                              
+                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                  <button type="submit" id="editUserButton" class="btn btn-primary btn-lg">Edit Employee</button>
+                                  &nbsp;
+                                  <button id="cancelEditButton" class="btn btn-danger btn-lg">Cancel Edit</button>
+                                </div>
+                              
+                              </form>
+                            
+                            </div>
+                          </div>
+                        <!-- End of edit Employee Form-->
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+        
 
 
 

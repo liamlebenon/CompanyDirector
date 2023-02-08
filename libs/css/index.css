@@ -1,7 +1,8 @@
 body {
     max-height: 100vh;
-    background-image: url('../../images/background.jpg');
+    background-color: rgb(243, 243, 243);
     background-size:cover;
+    min-width: 375px;
 }
 
 .navbar {
@@ -23,10 +24,60 @@ body {
     margin-bottom: 2rem !important;
 }
 
-table td {
-    width: 50%;
-}
 
 table th {
     width: 50%;
+    font-size: large;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.nav-item .nav-link {
+    font-size: large;
+}
+
+footer {
+    width: 20%;
+    margin: auto;
+    padding: 15px;
+    font-size: small;
+}
+
+.card.text-black {
+    border-radius: 25px;
+    box-shadow: 10px 10px 10px lightgrey;
+    height: 600px;
+}
+
+#profileImage {
+    align-items: center;
+    display: flex;
+    width: 25%;
+    margin: auto;
+}
+
+.employeeDetails {
+    text-align: center;
+}
+
+.list-unstyled.mb-1-9 {
+    padding: 15px;
+    font-size: large
+}
+
+.mb-2 {
+    padding: 10px;
+}
+
+@media (max-width: 1224px) {
+    #profileImage {
+        display: none
+    }
+
+    .card-body.p-1-9 {
+        padding-top: 15%;
+    }
 }
