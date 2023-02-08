@@ -97,3 +97,13 @@ $('#createNewUserForm').submit((e) => {
         }
     });
 });
+
+// Filter table search
+$(document).ready(function(){
+    $("#searchTable").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#tableBody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });

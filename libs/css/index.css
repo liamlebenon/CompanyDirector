@@ -12,3 +12,21 @@ body {
 .nav-item {
     padding-left: 5rem;
 }
+
+.form-outline {
+    width: 50%;
+    margin: auto;
+    padding-bottom: 20px;
+}
+
+.mb-5 {
+    margin-bottom: 2rem !important;
+}
+
+table td {
+    width: 50%;
+}
+
+table th {
+    width: 50%;
+}
