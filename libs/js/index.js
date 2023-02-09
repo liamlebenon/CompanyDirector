@@ -70,12 +70,14 @@ $('#companyLogoButton').click(() => {
     $('#createNewUserBox').hide();
     $('#employeeInfoBox').hide();
     $('#allEmployeesBox').show();
+    $('#editEmployeeForm').hide();    
 }); 
 
 $('#employeesButton').click(() => {
     $('#createNewUserBox').hide();
     $('#employeeInfoBox').hide();
     $('#allEmployeesBox').show();
+    $('#editEmployeeForm').hide();
 }); 
 
 // Submit form button
@@ -112,7 +114,8 @@ const employeeDetails = {
     lastName: '',
     department: '',
     email: '',
-    location: ''
+    location: '',
+    employeeId: ''
 };
 
 $('table').click((e) => {
@@ -135,6 +138,7 @@ $('table').click((e) => {
                 employeeDetails.department = employee.department;
                 employeeDetails.email = employee.email;
                 employeeDetails.location = employee.location;
+                employeeDetails.id = employee.employeeId;
 
                 $('#employeeName').html(`${employeeDetails.firstName} ${employeeDetails.lastName}`);
                 $('#employeePosition').html(employeeDetails.department);
@@ -146,6 +150,7 @@ $('table').click((e) => {
 });
 
 $('#editEmployee').click(() => {
+    $('#editDepartment').find('option').remove();
     $.ajax({
         url: 'libs/php/getAllDepartments.php',
         type: 'POST',
@@ -153,13 +158,22 @@ $('#editEmployee').click(() => {
         success: (result) => {
             console.log(result)
             const editDepartmentSelect = $('#editDepartment');
-            editDepartmentSelect.empty();
             result.data.forEach(department => {
-                $('<option>', {
-                    text: department.name,
-                    value: department.id,
-                    locationId: department.locationID
-                }).appendTo(editDepartmentSelect)
+                if (employeeDetails.department === department.name) {
+                    $('<option>', {
+                        text: department.name,
+                        value: department.id,
+                        locationId: department.locationID,
+                        selected: true
+                    }).appendTo(editDepartmentSelect);
+                } else {
+                    $('<option>', {
+                        text: department.name,
+                        value: department.id,
+                        locationId: department.locationID
+                }).appendTo(editDepartmentSelect);
+                }
+
             });
         }
     });
@@ -168,9 +182,36 @@ $('#editEmployee').click(() => {
     $('#editFirstName').val(employeeDetails.firstName);
     $('#editLastName').val(employeeDetails.lastName);
     $('#editEmail').val(employeeDetails.email);
-    $('#initialDepartment').text(employeeDetails.department).change();
-    console.log(employeeDetails.department)
+    
 });
+
+// Delete Employee Functions
+$('#deleteEmployee').click(() => {
+    $('#confirmDeleteModal').modal("show");
+    console.log(employeeDetails)
+    $('#employeeNameToDelete').html(employeeDetails.firstName + ' ' + employeeDetails.lastName);
+});
+
+const deleteEmployeeByID = (employeeId) => {
+    $.ajax({
+        url: 'libs/php/deleteEmployeeByID.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: employeeId
+        },
+        success: (result) => {
+            console.log('Employee Successfully deleted');
+            console.log(result);
+            fetchAllEmployees();
+        }
+    });
+};
+
+$('#confirmDeleteEmployee').click(() => {
+    deleteEmployeeByID(employeeDetails.id);
+
+})
 
 $('#editUserButton').click((e) => {
     e.preventDefault();

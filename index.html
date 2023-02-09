@@ -225,11 +225,26 @@
         </div>
       </div>
     </section>
-        
 
-
-
-
+    <div id="confirmDeleteModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to permanently delete <span id="employeeNameToDelete"></span>?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <form method="POST" id="confirmDeleteEmployeeForm">
+              <button type="submit" id="confirmDeleteEmployee" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
         <script type="application/javascript" src="./libs/js/jquery-2.2.3.min.js"></script>
         <script src="./bootstrap/js/bootstrap.js"></script>
         <script type="application/javascript" src="./libs/js/index.js"></script>
