@@ -19,6 +19,8 @@ const fetchAllEmployees = () => {
                 )
             })
             $('#employeeCount').html(employees.length);
+            $('#tableLoader').css('display', 'none');
+            $('#table').css('display', 'block');
         }
     });
 };
@@ -119,6 +121,8 @@ const employeeDetails = {
 };
 
 $('table').click((e) => {
+    $('#employeeDetailsLoaded').css('display', 'none');
+    $('#employeeDetailsLoader').css('display', 'block');
     const employeeId = e.target.getAttribute('userid');
     if (employeeId !== null) {
         $('#allEmployeesBox').hide();
@@ -143,7 +147,10 @@ $('table').click((e) => {
                 $('#employeeName').html(`${employeeDetails.firstName} ${employeeDetails.lastName}`);
                 $('#employeePosition').html(employeeDetails.department);
                 $('#employeeEmail').html(employeeDetails.email);
-                $('#employeeLocation').html(employeeDetails.location)
+                $('#employeeLocation').html(employeeDetails.location);
+
+                $('#employeeDetailsLoader').css('display', 'none');
+                $('#employeeDetailsLoaded').css('display', 'block');
             }
         });
     } 
