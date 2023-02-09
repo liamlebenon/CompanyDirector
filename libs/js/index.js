@@ -210,11 +210,36 @@ const deleteEmployeeByID = (employeeId) => {
 
 $('#confirmDeleteEmployee').click(() => {
     deleteEmployeeByID(employeeDetails.id);
+});
+// End Delete Employee Functions
 
-})
+// Edit Employee Functions
+const updateEmployeeDetails = (employeeId) => {
+    const firstName = capitalize($('#editFirstName').val()).trim();
+    const lastName = capitalize($('#editLastName').val()).trim();
+    const email = $('#editEmail').val().trim();
+    const departmentID = $('#editDepartment').val();
 
-$('#editUserButton').click((e) => {
-    e.preventDefault();
+    $.ajax({
+        url: 'libs/php/updateEmployeeDetails.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            departmentID: departmentID,
+            id: employeeId,
+        },
+        success: (result) => {
+            console.log('Employee successfully updated')
+            fetchAllEmployees();
+        }
+    });
+};
+
+$('#editUserButton').click(() => {
+    updateEmployeeDetails(employeeDetails.id);
 });
 
 $('#cancelEditButton').click((e) => {
