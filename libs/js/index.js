@@ -44,6 +44,33 @@ const populateDepartments = () => {
     });
 };
 
+let locations;
+let departments;
+
+const getAllLocations = () => {
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        dataType: 'json',
+        success: (results) => {
+            locations = results.data;
+        }
+    });
+};
+getAllLocations();
+
+const getAllDepartments = () => {
+    $.ajax({
+        url: 'libs/php/getAllDepartments.php',
+        type: 'POST',
+        dataType: 'json',
+        success: (results) => {
+            departments = results.data;
+        }
+    });
+};
+getAllDepartments();
+
 // Util functions
 // Capitalize First Letter
 const capitalize = (string) => {
@@ -58,14 +85,131 @@ $('document').ready(() => {
 
 // Navbar buttons
 
-// Opens the create page
-$('#createButton').click(() => {
+// Opens the create Employee page
+$('#createEmployeeButton').click(() => {
     // Clears the form whenever the user opens the page
     $('#createNewUserForm').trigger("reset");
     $('#allEmployeesBox').hide();
     $('#employeeInfoBox').hide();
+    $('#createNewLocationBox').hide();
+    $('#createNewDepartmentBox').hide();    
     $('#createNewUserBox').show();
 });
+
+// Opens the create Department page
+$('#createDepartmentButton').click(() => {
+    // Clears the form whenever the user opens the page
+    $('#createNewDepartmentForm').trigger("reset");
+    $('#allEmployeesBox').hide();
+    $('#employeeInfoBox').hide();
+    $('#createNewUserBox').hide();
+    $('#createNewLocationBox').hide();
+    $('#createNewDepartmentBox').show();
+
+    // Populate Location select
+    // Makes sure the locations select will only be populated once
+    if ($('#selectDepartmentLocation option').length === 1) {
+        $.ajax({
+            url: 'libs/php/getAllLocations.php',
+            type: 'POST',
+            dataType: 'json',
+            success: (results) => {
+                const locations = results.data;
+                locations.forEach(location => {
+                    $('<option>', {
+                        text: location.name,
+                        value: location.id,
+                    }).appendTo(selectDepartmentLocation);
+                })
+            }
+    });
+    }
+});
+
+// Submit createDepartment
+$('#createNewDepartmentForm').submit((e) => {
+    // Trims and capitalizes department name
+    const departmentName = capitalize($('#newDepartmentName').val()).trim();
+    const locationID = $('#selectDepartmentLocation').val();
+    let dataIsOkay = true;
+
+    if ($('#selectDepartmentLocation').val() === null) {
+        alert('Please select a location.');
+        dataIsOkay = false;
+        e.preventDefault();
+        return false;
+    };
+
+    // Ensures the department does not already exist
+    departments.forEach(department => {
+        if(departmentName === department.name) {
+            alert('Department already exists.');
+            dataIsOkay = false;
+            e.preventDefault();
+            return;
+        }
+    });
+
+    if (dataIsOkay) {
+        $.ajax({
+            url: 'libs/php/insertDepartment.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                name: departmentName,
+                locationID: locationID
+            },
+            success: () => {
+                // Updates the departments array
+                getAllDepartments();
+            }
+        });
+    }
+
+});
+
+// Opens the create Location page
+$('#createLocationButton').click(() => {
+    // Clears the form whenever the user opens the page
+    $('#createNewLocationForm').trigger("reset");
+    $('#allEmployeesBox').hide();
+    $('#employeeInfoBox').hide();
+    $('#createNewUserBox').hide();
+    $('#createNewDepartmentBox').hide();
+    $('#createNewLocationBox').show();
+});
+
+// Submit create location
+$('#createNewLocationForm').submit((e) => {    
+    // Trims and capitalizes location name
+    const locationName = capitalize($('#newLocation').val()).trim();
+
+    // Ensures the location does not already exist
+    let dataIsOkay = true;
+    locations.forEach(location => {
+        if(locationName === location.name) {
+            alert('Location already exists.');
+            dataIsOkay = false;
+            e.preventDefault();
+        }
+    });
+    if (dataIsOkay) {
+        $.ajax({
+            url: 'libs/php/insertLocation.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                name: locationName
+            },
+            success: () => {
+                // updates the locations array
+                getAllLocations();
+            }
+        }); 
+    }
+
+});
+
 
 // Brings user back to home page
 $('#companyLogoButton').click(() => {
@@ -92,23 +236,24 @@ $('#createNewUserForm').submit(() => {
 
     // Checks if a department has been selected 
     if ($('#userDepartment').val() === null) {
-        alert('Please select a department');
-        return;
+        alert('Please select a department.');
+        return false;
+    } else {
+        $.ajax({
+            url: 'libs/php/insertEmployee.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                departmentID: departmentID
+            },
+            success: () => {
+                fetchAllEmployees();
+            }
+        })
     }
-    $.ajax({
-        url: 'libs/php/insertEmployee.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            departmentID: departmentID
-        },
-        success: () => {
-            fetchAllEmployees();
-        }
-    });
 });
 
 const employeeDetails = {
@@ -255,6 +400,11 @@ $('#cancelEditButton').click((e) => {
     $('#employeeDetails').show();
 })
 
+// Dropdown menu
+$("#dropdown").hover(function(){
+    $('.dropdown-menu').toggle(200)
+});
+
 // Filter table search
 $(document).ready(function(){
     $("#searchTable").on("keyup", function() {
@@ -263,5 +413,5 @@ $(document).ready(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });
-  });
+});
 

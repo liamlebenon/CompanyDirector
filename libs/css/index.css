@@ -82,6 +82,11 @@ footer {
     }
 }
 
+/** Dropdown Menu **/
+.dropdown-menu {
+    background-color: #212529;
+    border: none;
+}
 /** Spinner CSS **/
 .loader {
     border: 16px solid #f3f3f3; /* Light grey */
