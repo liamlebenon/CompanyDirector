@@ -45,6 +45,7 @@ const populateDepartments = () => {
 let locations;
 let departments;
 let firstLoad = true;
+let firstLocationsLoad = true;
 
 const getAllLocations = () => {
     $.ajax({
@@ -260,6 +261,12 @@ const departmentDetails = {
     name: '',
     location: ''
 };
+
+const locationDetails = {
+    id: '',
+    name: '',
+    departments: []
+}
 
 // Select employee from table
 $('#employeeTable').click((e) => {
@@ -581,6 +588,169 @@ $('#deleteDepartmentButton').click(() => {
         }
     });
 });
+
+// start edit and view locations
+
+const fetchAllLocations = () => {
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        dataType: 'json',
+        success: (results) => {
+            const locations = results.data;
+            locations.forEach(location => {
+                $('#locationTableBody').append(
+                    `<tr>
+                        <td>${location.id}</td>                        
+                        <td><a href="#" class="test" locationId=${location.id}>${location.name}</a></td>   
+                    </tr>`
+                )
+            })
+            $('#locationsCount').html(locations.length);
+            $('#locationsLoader').css('display', 'none');
+            $('#locationsTable').css('display', 'block');
+        }
+    }); 
+}
+
+$('#editLocationsButton').click(() => {
+    hideAllDivs();
+    $('#allLocationsBox').show();
+    // Ajax request to get all locations
+    if (firstLocationsLoad) {
+        fetchAllLocations();
+        firstLocationsLoad = false;
+    } else {
+        return;
+    }
+});
+
+// Select Individual location
+$('#locationsTable').click((e) => {
+    $('#locationsDetailsLoaded').css('display', 'none');
+    $('#locationsDetailsLoader').css('display', 'block');
+    const locationId = e.target.getAttribute('locationId');
+    if (locationId !== null) {
+        $('#allLocationsBox').hide();        
+        $('#locationInfoBox').show();
+        $('#locationDetails').show()
+        $.ajax({
+            url: 'libs/php/getLocationByID.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                id: locationId
+            },
+            success: (results) => {
+                
+                $('#locationDetailsTableBody').html('');
+                const locations = results.data;
+
+                locationDetails.name = locations[0].locationName;
+                locationDetails.id = locations[0].locationId; 
+
+                if (locations[0].departmentName === null) {
+                    $('#locationDetailsTableBody').append(
+                        `<tr>                        
+                            <td>No departments assigned to this location.</td>   
+                        </tr>`
+                    );
+                    $('#locationDetailsTable').show();
+                    $('#locationDepartmentsCount').html('0') 
+                } else {
+                    locations.forEach(location => {
+                        $('#locationDetailsTableBody').append(
+                            `<tr>                        
+                                <td><a href="#" class="test" departmentId=${location.departmentId}>${location.departmentName}</a></td>   
+                            </tr>`
+                        )
+                        locationDetails.departments.push(location.departmentName);
+                    });
+                    $('#locationDetailsTable').show();
+                    $('#locationDepartmentsCount').html(locations.length)    
+                }                    
+                $('#locationName').html(locationDetails.name);
+                $('#locationID').html(locationDetails.id);
+                $('#locationDetailsLoader').css('display', 'none');
+                $('#locationDetailsLoaded').css('display', 'block');
+                
+            }
+        });
+    } 
+});
+
+const updateLocationDetails = (locationId) => {
+
+    const name = capitalize($('#editLocationName').val()).trim();
+    alert('called')
+    $.ajax({
+        url: 'libs/php/updateLocationDetails.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            locationName: name,
+            id: locationId
+        },
+        success: () => {
+            console.log('Location successfully updated')
+            alert('worked')
+            fetchAllLocations();
+        }
+    });
+};
+
+$('#editLocationButton').click(() => {
+    $('#locationDetails').hide();
+    $('#editLocationForm').show();
+    $('#editLocationName').val(locationDetails.name);
+});
+
+// Will cancel the edit
+$('#cancelEditLocationButton').click((e) => {
+    e.preventDefault();
+    $('#editLocationForm').hide();
+    $('#locationDetails').show();
+});
+
+// Will confirm and submit the edit
+$('#confirmLocationButton').click(() => {
+    updateLocationDetails(locationDetails.id);
+});
+
+// Handle delete location
+const deleteLocationByID = (locationId) => {
+    $.ajax({
+        url: 'libs/php/deleteLocationByID.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: locationId
+        },
+        success: () => {
+            console.log('Location Successfully deleted');
+            fetchAllLocations();
+        }
+    });
+};
+
+$('#deleteLocationButton').click(() => {
+    let departmentCount = locationDetails.departments.length;
+    console.log(departmentCount)
+    if (departmentCount < 1) {  // If no departments, allow the user to delete the location
+        console.log('Works')
+        $('#confirmDeleteLocationModal').modal('show');
+        $('#locationNameToDelete').html(locationDetails.name);
+    } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
+        console.log('Works')
+        $('#locationMustBeEmptyModal').modal("show");
+    }
+});
+
+// confirm delete button
+$('#confirmDeleteLocation').click(() => {
+    deleteLocationByID(locationDetails.id);
+});
+
 
 
 // Dropdown menu
