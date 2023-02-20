@@ -138,8 +138,6 @@ $('#createNewDepartmentForm').submit((e) => {
 
     // Ensures the department does not already exist
     departments.forEach(department => {
-        console.log(department);
-        console.log(departmentName)
         if(departmentName == department.departmentName) {
             alert('Department already exists.');
             dataIsOkay = false;
@@ -314,7 +312,6 @@ $('#editEmployee').click(() => {
         dataType: 'json',
         success: (result) => {
             result.data.forEach(department => {
-                console.log(department)
                 if (employeeDetails.department === department.name) {
                     $('<option>', {
                         text: department.name,
@@ -458,11 +455,9 @@ $('#departmentsTable').click((e) => {
             },
             success: (results) => {
                 const department = results.data[0];
-                console.log(department)
                 departmentDetails.name = department.departmentName;
                 departmentDetails.id = department.departmentId;
                 departmentDetails.location = department.locationName;
-                console.log(departmentDetails.location)
 
                 $('#departmentName').html(departmentDetails.name);
                 $('#departmentID').html(departmentDetails.id);
@@ -483,9 +478,7 @@ $('#editDepartmentButton').click(() => {
         type: 'POST',
         dataType: 'json',
         success: (result) => {
-            console.log(result);
             result.data.forEach(location => {
-                console.log(location.name);
                 if (departmentDetails.location === location.name) {
                     $('<option>', {
                         text: location.name,
@@ -498,7 +491,6 @@ $('#editDepartmentButton').click(() => {
                         value: location.id,
                     }).appendTo($('#editDepartmentLocation'));
                 }
-    
             });
         }
     });
@@ -682,7 +674,6 @@ $('#locationsTable').click((e) => {
 const updateLocationDetails = (locationId) => {
 
     const name = capitalize($('#editLocationName').val()).trim();
-    alert('called')
     $.ajax({
         url: 'libs/php/updateLocationDetails.php',
         type: 'POST',
@@ -693,7 +684,6 @@ const updateLocationDetails = (locationId) => {
         },
         success: () => {
             console.log('Location successfully updated')
-            alert('worked')
             fetchAllLocations();
         }
     });
@@ -735,13 +725,10 @@ const deleteLocationByID = (locationId) => {
 
 $('#deleteLocationButton').click(() => {
     let departmentCount = locationDetails.departments.length;
-    console.log(departmentCount)
     if (departmentCount < 1) {  // If no departments, allow the user to delete the location
-        console.log('Works')
         $('#confirmDeleteLocationModal').modal('show');
         $('#locationNameToDelete').html(locationDetails.name);
     } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
-        console.log('Works')
         $('#locationMustBeEmptyModal').modal("show");
     }
 });
