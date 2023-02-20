@@ -73,7 +73,7 @@ getAllDepartments();
 // Util functions
 // Capitalize First Letter
 const capitalize = (string) => {
-    return string[0].toUpperCase() + string.slice(1);
+    return string.replace(/(^\w|\s\w)/g, m => m.toUpperCase());
 };
 
 // Initial page load fetches all employees from database
@@ -137,7 +137,9 @@ $('#createNewDepartmentForm').submit((e) => {
 
     // Ensures the department does not already exist
     departments.forEach(department => {
-        if(departmentName === department.name) {
+        console.log(department);
+        console.log(departmentName)
+        if(departmentName == department.departmentName) {
             alert('Department already exists.');
             dataIsOkay = false;
             e.preventDefault();
@@ -468,6 +470,7 @@ $('#departmentsTable').click((e) => {
 
 // Handle edit department
 $('#editDepartmentButton').click(() => {
+    $('#editDepartmentLocation').find('option').remove();
     $.ajax({
         url: 'libs/php/getAllLocations.php',
         type: 'POST',
@@ -499,6 +502,7 @@ $('#editDepartmentButton').click(() => {
 });
 
 // Edit Employee Functions
+// Will be called when the editDepartmentsForm is submitted
 const updateDepartmentDetails = (departmentId) => {
 
     const name = capitalize($('#editDepartmentName').val()).trim();
@@ -520,12 +524,14 @@ const updateDepartmentDetails = (departmentId) => {
     });
 };
 
+// Will cancel the edit
 $('#cancelEditDepartmentButton').click((e) => {
     e.preventDefault();
     $('#editDepartmentForm').hide();
     $('#departmentDetails').show();
 });
 
+// Will confirm and submit the edit
 $('#confirmEditDepartmentButton').click(() => {
     updateDepartmentDetails(departmentDetails.id);
 });
@@ -546,6 +552,7 @@ const deleteDepartmentByID = (departmentId) => {
     });
 };
 
+// Will delete the department
 $('#confirmDeleteDepartment').click(() => {
     deleteDepartmentByID(departmentDetails.id);
 });
