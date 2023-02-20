@@ -696,7 +696,7 @@ $('#editLocationButton').click(() => {
 });
 
 // Will cancel the edit
-$('#cancelEditLocationButton').click((e) => {
+$('#cancelLocationButton').click((e) => {
     e.preventDefault();
     $('#editLocationForm').hide();
     $('#locationDetails').show();
