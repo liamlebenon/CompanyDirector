@@ -26,11 +26,10 @@ const fetchAllEmployees = () => {
 
 const populateDepartments = () => {
     $.ajax({
-        url: 'libs/php/getAllDepartments.php',
+        url: 'libs/php/getAllDepartmentsWithLocationID.php',
         type: 'POST',
         dataType: 'json',
         success: (result) => {
-            console.log(result)
             const departmentSelect = $('#userDepartment');
             result.data.forEach(department => {
                 $('<option>', {
@@ -45,6 +44,7 @@ const populateDepartments = () => {
 
 let locations;
 let departments;
+let firstLoad = true;
 
 const getAllLocations = () => {
     $.ajax({
@@ -391,20 +391,17 @@ $('#cancelEditButton').click((e) => {
     e.preventDefault();
     $('#editEmployeeForm').hide();
     $('#employeeDetails').show();
-})
+});
+
+// End of edit employee functions
 
 // Edit department Funtions 
-$('#editDepartmentButton').click(() => {
-    hideAllDivs();
-    $('#allDepartmentsBox').show();
-
-    // Ajax request to get all Departments
+const fetchAllDepartments = () => {
     $.ajax({
         url: 'libs/php/getAllDepartments.php',
         type: 'POST',
         dataType: 'json',
         success: (results) => {
-            console.log(results);
             const departments = results.data;
             departments.forEach(department => {
                 $('#departmentTableBody').append(
@@ -418,7 +415,20 @@ $('#editDepartmentButton').click(() => {
             $('#departmentsLoader').css('display', 'none');
             $('#departmentsTable').css('display', 'block');
         }
-    });
+    }); 
+}
+
+$('#editDepartmentsButton').click(() => {
+    hideAllDivs();
+    $('#allDepartmentsBox').show();
+    // Ajax request to get all Departments
+    if (firstLoad) {
+        fetchAllDepartments();
+        firstLoad = false;
+    } else {
+        return;
+    }
+
 });
 
 // Handle department selection
@@ -454,6 +464,115 @@ $('#departmentsTable').click((e) => {
             }
         });
     } 
+});
+
+// Handle edit department
+$('#editDepartmentButton').click(() => {
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        dataType: 'json',
+        success: (result) => {
+            console.log(result);
+            result.data.forEach(location => {
+                console.log(location.name);
+                if (departmentDetails.location === location.name) {
+                    $('<option>', {
+                        text: location.name,
+                        value: location.id,
+                        selected: true
+                    }).appendTo($('#editDepartmentLocation'));
+                } else {
+                    $('<option>', {
+                        text: location.name,
+                        value: location.id,
+                    }).appendTo($('#editDepartmentLocation'));
+                }
+    
+            });
+        }
+    });
+
+    $('#departmentDetails').hide();
+    $('#editDepartmentForm').show();
+    $('#editDepartmentName').val(departmentDetails.name);
+});
+
+// Edit Employee Functions
+const updateDepartmentDetails = (departmentId) => {
+
+    const name = capitalize($('#editDepartmentName').val()).trim();
+    const locationID = $('#editDepartmentLocation').val();
+
+    $.ajax({
+        url: 'libs/php/updateDepartmentDetails.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            departmentName: name,
+            locationID: locationID,
+            departmentID: departmentId
+        },
+        success: () => {
+            console.log('Department successfully updated')
+            fetchAllDepartments();
+        }
+    });
+};
+
+$('#cancelEditDepartmentButton').click((e) => {
+    e.preventDefault();
+    $('#editDepartmentForm').hide();
+    $('#departmentDetails').show();
+});
+
+$('#confirmEditDepartmentButton').click(() => {
+    updateDepartmentDetails(departmentDetails.id);
+});
+
+// Handle delete department
+const deleteDepartmentByID = (departmentId) => {
+    $.ajax({
+        url: 'libs/php/deleteDepartmentByID.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: departmentId
+        },
+        success: () => {
+            console.log('Department Successfully deleted');
+            fetchAllDepartments();
+        }
+    });
+};
+
+$('#confirmDeleteDepartment').click(() => {
+    deleteDepartmentByID(departmentDetails.id);
+});
+
+$('#deleteDepartmentButton').click(() => {
+    // Get all personnel by department to see if anyone is assigned
+    const departmentID = departmentDetails.id;
+    let employeeCount = 0;
+
+    $.ajax({
+        url: 'libs/php/getEmployeesByDepartment.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            departmentID: departmentID
+        },
+        success: (results) => {
+            // Assign employee count the number of employees to check if empty
+            employeeCount = results.data.personnel.length;
+            if (employeeCount < 1) {  // If no employees, allow the user to delete the department
+                $('#departmentNameToDelete').html(departmentDetails.name);
+                $('#confirmDeleteDepartmentModal').modal('show');
+            } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
+                $('#departmentMustBeEmptyModal').modal("show");
+            }
+        }
+    });
 });
 
 

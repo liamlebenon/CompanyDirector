@@ -37,7 +37,7 @@
                   <li class="nav-item" id="editDropdown">
                     <a class="nav-link" href="#"><b>Edit</b></a>
                     <ul class="dropdown-menu" id="editDropdownList" style="display: none">
-                      <li><a class="nav-link" href="#" id="editDepartmentButton">Department</a></li>
+                      <li><a class="nav-link" href="#" id="editDepartmentsButton">Department</a></li>
                       <li><a class="nav-link" href="#" id="editLocationButton">Location</a></li>
                     </ul>
                   </li>
@@ -424,11 +424,89 @@
                     </div>
                 </div>
               </div>
+
+                <!-- Start of Edit department box -->
+                <div class="row justify-content-center allDivs" id="editDepartmentForm" style="display: none;">
+                  <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
+                    
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Department</p>
+                  
+                    <form class="mx-1 mx-md-6" method="POST" id="editDepartmentBox">
+                    
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                          <input type="text" id="editDepartmentName" class="form-control" name="editDepartmentName" required />
+                          <label class="form-label" for="form3Example1c"><b>Department Name</b></label>
+                        </div>
+                      </div>
+                    
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                          <select id="editDepartmentLocation" class="form-select" name="editDepartmentLocation" required >
+                          </select>
+                        </div>
+                      </div>
+                    
+                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <button type="submit" id="confirmEditDepartmentButton" class="btn btn-primary btn-lg">Edit Department</button>
+                        &nbsp;
+                        <button id="cancelEditDepartmentButton" class="btn btn-danger btn-lg">Cancel Edit</button>
+                      </div>
+                    
+                    </form>
+                  
+                  </div>
+                </div>
+  
+                <!-- End of edit department box -->
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- Alert user departments must be empty modal -->
+    <div id="departmentMustBeEmptyModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Cannot Delete Department</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            Departments must not contain any employees to be deleted.  Please ensure no employees are assigned to this department and try again.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End alert user -->
+
+    <!-- Confirm delete department -->
+    <div id="confirmDeleteDepartmentModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to permanently delete <span id="departmentNameToDelete"></span>?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <form method="POST" id="confirmDeleteDepartmentForm">
+              <button type="submit" id="confirmDeleteDepartment" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End confirm delete department -->
 
         <script type="application/javascript" src="./libs/js/jquery-2.2.3.min.js"></script>
         <script src="./bootstrap/js/bootstrap.js"></script>
