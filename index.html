@@ -24,14 +24,24 @@
                   <li class="nav-item">
                     <a class="nav-link" aria-current="page" id="employeesButton" href="#"><b>Employees</b></a>
                   </li>
+
                   <li class="nav-item" id="dropdown">
                     <a class="nav-link" href="#"><b>Create</b></a>
-                    <ul class="dropdown-menu" style="display: none">
+                    <ul class="dropdown-menu" id="createDropdownList" style="display: none">
                       <li><a class="nav-link" href="#" id="createEmployeeButton">Employee</a></li>
                       <li><a class="nav-link" href="#" id="createDepartmentButton">Department</a></li>
                       <li><a class="nav-link" href="#" id="createLocationButton">Location</a></li>
                     </ul>
                   </li>
+
+                  <li class="nav-item" id="editDropdown">
+                    <a class="nav-link" href="#"><b>Edit</b></a>
+                    <ul class="dropdown-menu" id="editDropdownList" style="display: none">
+                      <li><a class="nav-link" href="#" id="editDepartmentButton">Department</a></li>
+                      <li><a class="nav-link" href="#" id="editLocationButton">Location</a></li>
+                    </ul>
+                  </li>
+
                 </ul>
               </div>
             </div>
@@ -40,7 +50,7 @@
 
         <!-- View all users box (default view) -->
         
-        <section class="vh-100" id="allEmployeesBox">
+        <section class="vh-100 allDivs" id="allEmployeesBox">
           <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-8 col-xl-10">
@@ -83,7 +93,7 @@
       </section>
 
       <!-- Create new user box -->
-      <section class="vh-100" id="createNewUserBox" style="display: none">
+      <section class="vh-100 allDivs" id="createNewUserBox" style="display: none">
           <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="col-lg-12 col-xl-8">
@@ -92,7 +102,7 @@
                     <div class="row justify-content-center">
                       <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
         
-                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Add Employee</p>
+                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create Employee</p>
         
                         <form class="mx-1 mx-md-6" method="POST" id="createNewUserForm">
         
@@ -143,7 +153,7 @@
       <!-- End of create new user box -->
 
       <!-- Start of Create new Department box -->
-      <section class="vh-100" id="createNewDepartmentBox" style="display: none">
+      <section class="vh-100 allDivs" id="createNewDepartmentBox" style="display: none">
         <div class="container h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-12 col-xl-8">
@@ -190,7 +200,7 @@
     <!-- End of create Department Box -->
 
     <!-- Start of create Location Box -->
-    <section class="vh-100" id="createNewLocationBox" style="display: none">
+    <section class="vh-100 allDivs" id="createNewLocationBox" style="display: none">
       <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-lg-12 col-xl-8">
@@ -227,7 +237,7 @@
     </section>
 
       <!-- Start of Employee Information box -->
-      <section class="vh-100" id="employeeInfoBox" style="display: none;">
+      <section class="vh-100 allDivs" id="employeeInfoBox" style="display: none;">
         <div class="container h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-lg-8 col-xl-10">
@@ -262,7 +272,7 @@
                 </div>  
 
                 <!-- Edit Employee Form -->
-                <div class="row justify-content-center" id="editEmployeeForm" style="display: none;">
+                <div class="row justify-content-center allDivs" id="editEmployeeForm" style="display: none;">
                   <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
                     
                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Employee</p>
@@ -293,7 +303,7 @@
                       <div class="d-flex flex-row align-items-center mb-4">
                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                         <div class="form-outline flex-fill mb-0">
-                          <select id="editDepartment" class="form-select" name="editDepartmentID" required >
+                          <select id="editDepartmentID" class="form-select" name="editDepartmentID" required >
                               <option selected id="initialDepartment"><b></b></option>
                           </select>
                         </div>
@@ -340,6 +350,86 @@
       </div>
     </div>
     <!-- End confirm delete modal -->
+
+
+    <!-- Start of Edit department page -->
+    <section class="vh-100 allDivs" id="allDepartmentsBox" style="display: none">
+      <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-8 col-xl-10">
+            <div class="card text-black" style="border-radius: 25px;">
+              <div class="card-body p-md-4">
+                <div class="row justify-content-center">
+                  <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
+    
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Departments</p>
+                    <div class="input-group">
+                      <div class="form-outline">
+                        <input type="search" id="searchDepartmentsTable" placeholder="Search table..."class="form-control" />
+                      </div>
+                    </div>
+                    <div class="loader" id="departmentsLoader"></div>
+                      <div id="departmentsTable" style="display: none">
+                        <table id="departmentsTable" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                          <thead>
+                            <tr>
+                              <th class="th-sm col-md-3">Name
+                              </th>
+                              <th class="th-sm col-md-1">Location
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody id="departmentTableBody">
+                          </tbody>
+                        </table>
+                        <footer>Total Departments: <span id="departmentsCount"></span></footer>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+    <!-- End of Edit department page -->
+    
+    <!-- Start of department information page -->
+    <section class="vh-100 allDivs" id="departmentInfoBox" style="display: none;">
+      <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-8 col-xl-10">
+            <div class="card text-black" style="border-radius: 25px;">
+              <div class="card-body p-md-4">
+                <div class="row justify-content-center">
+                  <div class="col-md-12 col-lg-10 col-xl-12 order-1 order-lg-1" id="departmentDetails">
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Department Details</p>
+                    <div class="loader" id="departmentDetailsLoader"></div>
+                    <div class="card card-style1 border-0" id="departmentDetailsLoaded">
+                        <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7" >
+                            <div class="row align-items-center">
+                                <div class="col-lg-12 px-xl-10 col-md-8 offset-md-4">
+                                    <div class="departmentName">
+                                        <h3 class="h2 text-black mb-0" class="departmentDetails" id="departmentName"></h3>
+                                    </div>
+                                    <ul class="list-unstyled mb-1-9">
+                                        <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>ID: &nbsp;</b><span id="departmentID" class="departmentDetails"></span></span></li>
+                                        <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Location: &nbsp;</b><span id="departmentLocation" class="departmentDetails"></span></span></li>
+                                    </ul>
+                                    <button type="button" id="editDepartmentButton" class="btn btn-primary">Edit Department</button>
+                                    <button type="button" id="deleteDepartmentButton" class="btn btn-danger">Delete Department</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
         <script type="application/javascript" src="./libs/js/jquery-2.2.3.min.js"></script>
         <script src="./bootstrap/js/bootstrap.js"></script>
         <script type="application/javascript" src="./libs/js/index.js"></script>

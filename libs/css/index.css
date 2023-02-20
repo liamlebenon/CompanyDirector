@@ -11,7 +11,7 @@ body {
     width: 100%;
 }
 .nav-item {
-    padding-left: 5rem;
+    margin-left: 5rem;
 }
 
 .form-outline {
@@ -83,10 +83,11 @@ footer {
 }
 
 /** Dropdown Menu **/
-.dropdown-menu {
+.dropdown-menu, .edit-menu {
     background-color: #212529;
     border: none;
 }
+
 /** Spinner CSS **/
 .loader {
     border: 16px solid #f3f3f3; /* Light grey */
