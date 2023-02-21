@@ -130,7 +130,7 @@ $('#createNewDepartmentForm').submit((e) => {
     let dataIsOkay = true;
 
     if ($('#selectDepartmentLocation').val() === null) {
-        alert('Please select a location.');
+        $('#selectLocationModal').modal('show');
         dataIsOkay = false;
         e.preventDefault();
         return false;
@@ -139,7 +139,7 @@ $('#createNewDepartmentForm').submit((e) => {
     // Ensures the department does not already exist
     departments.forEach(department => {
         if(departmentName == department.departmentName) {
-            alert('Department already exists.');
+            $('#departmentExistsModal').modal('show');
             dataIsOkay = false;
             e.preventDefault();
             return;
@@ -225,6 +225,7 @@ $('#createNewUserForm').submit(() => {
 
     // Checks if a department has been selected 
     if ($('#userDepartment').val() === null) {
+        $('#userDepartmentIsEmptyModal').modal('show');
         return false;
     } else {
         $.ajax({
@@ -758,15 +759,42 @@ $("#dropdown").hover(function(){
 
 $('#editDropdown').hover(function() {
     $('#editDropdownList').toggle(200);
-})
+});
+
+const filterTable = (searchWord) => {
+    $.ajax({
+        url: 'libs/php/searchTable.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            term: searchWord
+        },
+        success: (results) => {                
+            $('#tableBody').html('');
+            const employees = results.data;
+            employees.forEach(employee => {
+                console.log(employee)
+                const fullname = `${employee.firstName} ${employee.lastName}`;
+                $('#tableBody').prepend(
+                    `<tr>
+                        <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
+                        <td>${employee.location}</td>
+                        <td>${employee.department}</td>
+                    </tr>`
+                )
+            })
+            $('#employeeCount').html(employees.length);
+            $('#tableLoader').css('display', 'none');
+            $('#table').css('display', 'block');
+        }
+    });
+};
 
 // Filter table search
 $(document).ready(function(){
     $("#searchTable").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#tableBody tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
+        let value = $(this).val().toLowerCase();
+        filterTable(value);
     });    
 });
 
