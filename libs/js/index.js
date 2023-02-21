@@ -181,7 +181,7 @@ $('#createNewLocationForm').submit((e) => {
     let dataIsOkay = true;
     locations.forEach(location => {
         if(locationName === location.name) {
-            alert('Location already exists.');
+            $('#locationExistsModal').modal("show");
             dataIsOkay = false;
             e.preventDefault();
         }
@@ -225,7 +225,6 @@ $('#createNewUserForm').submit(() => {
 
     // Checks if a department has been selected 
     if ($('#userDepartment').val() === null) {
-        alert('Please select a department.');
         return false;
     } else {
         $.ajax({
@@ -460,7 +459,6 @@ $('#departmentsTable').click((e) => {
                 departmentDetails.location = department.locationName;
 
                 $('#departmentName').html(departmentDetails.name);
-                $('#departmentID').html(departmentDetails.id);
                 $('#departmentLocation').html(departmentDetails.location);
 
                 $('#departmentDetailsLoader').css('display', 'none');
@@ -559,19 +557,18 @@ $('#confirmDeleteDepartment').click(() => {
 $('#deleteDepartmentButton').click(() => {
     // Get all personnel by department to see if anyone is assigned
     const departmentID = departmentDetails.id;
-    let employeeCount = 0;
 
     $.ajax({
-        url: 'libs/php/getEmployeesByDepartment.php',
+        url: 'libs/php/isDepartmentEmpty.php',
         type: 'POST',
         dataType: 'json',
         data: {
             departmentID: departmentID
         },
         success: (results) => {
+            const personnelCount = results.data[0].numberOfPersonnel;
             // Assign employee count the number of employees to check if empty
-            employeeCount = results.data.personnel.length;
-            if (employeeCount < 1) {  // If no employees, allow the user to delete the department
+            if (personnelCount < 1) {  // If no employees, allow the user to delete the department
                 $('#departmentNameToDelete').html(departmentDetails.name);
                 $('#confirmDeleteDepartmentModal').modal('show');
             } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
@@ -592,8 +589,7 @@ const fetchAllLocations = () => {
             const locations = results.data;
             locations.forEach(location => {
                 $('#locationTableBody').append(
-                    `<tr>
-                        <td>${location.id}</td>                        
+                    `<tr>                      
                         <td><a href="#" class="test" locationId=${location.id}>${location.name}</a></td>   
                     </tr>`
                 )
@@ -724,13 +720,28 @@ const deleteLocationByID = (locationId) => {
 };
 
 $('#deleteLocationButton').click(() => {
-    let departmentCount = locationDetails.departments.length;
-    if (departmentCount < 1) {  // If no departments, allow the user to delete the location
-        $('#confirmDeleteLocationModal').modal('show');
-        $('#locationNameToDelete').html(locationDetails.name);
-    } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
-        $('#locationMustBeEmptyModal').modal("show");
-    }
+    // Get all personnel by department to see if anyone is assigned
+    const locationID = locationDetails.id;
+
+    $.ajax({
+        url: 'libs/php/isLocationEmpty.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            locationID: locationID
+        },
+        success: (results) => {
+            console.log(results)
+            const departmentCount = results.data[0].numberOfDepartments;
+            // Assign departments count the number of departments to check if empty
+            if (departmentCount < 1) {  // If no employees, allow the user to delete the department
+                $('#locationNameToDelete').html(locationDetails.name);
+                $('#confirmDeleteLocationModal').modal('show');
+            } else {  // If there are departments, alert the user that location cannot be deleted while there are departments assigned
+                $('#locationMustBeEmptyModal').modal("show");
+            }
+        }
+    });
 });
 
 // confirm delete button
@@ -757,20 +768,5 @@ $(document).ready(function(){
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });    
-    
-    // filter department search
-    $("#searchDepartmentsTable").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#departmentTableBody tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-    });
-
-    $("#searchLocationsTable").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#locationTableBody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-      });
 });
 
