@@ -756,15 +756,21 @@ $(document).ready(function(){
       $("#tableBody tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
-    });
-});
-
-// filter department table search 
-$(document).ready(function(){
-    $("#searchDepartmentTable").on("keyup", function() {
+    });    
+    
+    // filter department search
+    $("#searchDepartmentsTable").on("keyup", function() {
       var value = $(this).val().toLowerCase();
       $("#departmentTableBody tr").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });
+
+    $("#searchLocationsTable").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#locationTableBody tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
 });
+

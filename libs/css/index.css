@@ -26,7 +26,7 @@ body {
 
 
 table th {
-    width: 50%;
+    width: 1%;
     font-size: large;
 }
 
@@ -107,4 +107,15 @@ footer {
 
   #editLocationsBox {
     margin-top: 5rem !important;
+  }
+
+  table {
+    min-width: 350px;
+  }
+  .addDivs {
+    min-width: 400px;
+  }
+
+  footer {
+    width: fit-content
   }
