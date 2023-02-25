@@ -215,6 +215,7 @@ $('#companyLogoButton').click(() => {
 
 $('#employeesButton').click(() => {
     hideAllDivs();
+    fetchAllEmployees();
     $('#allEmployeesBox').show();
 }); 
 
@@ -346,11 +347,14 @@ const fetchAllDepartments = () => {
         dataType: 'json',
         success: (results) => {
             const departments = results.data;
+            $('#departmentTableBody').html('');
             departments.forEach(department => {
+                console.log(department.departmentName)
                 $('#departmentTableBody').append(
                     `<tr>
                         <td><a href="#" class="test" departmentId=${department.departmentId}>${department.departmentName}</a></td>
                         <td>${department.locationName}</td>
+                        <td><i class="fa-solid fa-pen editDepartment" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id=${department.departmentId} data-department="${department.departmentName}" data-location=${department.locationName}></i> <i class="fa-solid fa-trash deleteDepartment" data-id=${department.departmentId} data-department="${department.departmentName}" data-bs-modal="#removeDepartmentModal  "data-location=${department.locationName}></i></td>
                     </tr>`
                 )
             })
@@ -374,48 +378,20 @@ $('#editDepartmentsButton').click(() => {
 
 });
 
-// Handle department selection
-$('#departmentsTable').click((e) => {
-    $('#departmentDetailsLoaded').css('display', 'none');
-    $('#departmentDetailsLoader').css('display', 'block');
-    const departmentId = e.target.getAttribute('departmentId');
-    if (departmentId !== null) {
-        $('#allDepartmentsBox').hide();        
-        $('#departmentInfoBox').show();
-        $('#departmentDetails').show()
-        $.ajax({
-            url: 'libs/php/getDepartmentByID.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                id: departmentId
-            },
-            success: (results) => {
-                const department = results.data[0];
-                departmentDetails.name = department.departmentName;
-                departmentDetails.id = department.departmentId;
-                departmentDetails.location = department.locationName;
-
-                $('#departmentName').html(departmentDetails.name);
-                $('#departmentLocation').html(departmentDetails.location);
-
-                $('#departmentDetailsLoader').css('display', 'none');
-                $('#departmentDetailsLoaded').css('display', 'block');
-            }
-        });
-    } 
-});
-
-// Handle edit department
-$('#editDepartmentButton').click(() => {
+$('#editDepartmentModal').on('show.bs.modal', (e) => {
     $('#editDepartmentLocation').find('option').remove();
+
     $.ajax({
         url: 'libs/php/getAllLocations.php',
         type: 'POST',
         dataType: 'json',
         success: (result) => {
+            const departmentToChange = $(e.relatedTarget).attr('data-id');
+            const currentDepartmentName = $(e.relatedTarget).attr('data-department');
+            const currentLocation = $(e.relatedTarget).attr('data-location');
+
             result.data.forEach(location => {
-                if (departmentDetails.location === location.name) {
+                if (currentLocation === location.name) {
                     $('<option>', {
                         text: location.name,
                         value: location.id,
@@ -428,13 +404,19 @@ $('#editDepartmentButton').click(() => {
                     }).appendTo($('#editDepartmentLocation'));
                 }
             });
+            $('#editDepartmentName').val(currentDepartmentName);
+            $('#departmentIDToEdit').val(departmentToChange);
         }
     });
-
-    $('#departmentDetails').hide();
-    $('#editDepartmentForm').show();
-    $('#editDepartmentName').val(departmentDetails.name);
 });
+
+$('#editDepartmentForm').on("submit", function(e) {
+    e.preventDefault(); 
+    updateDepartmentDetails($('#departmentIDToEdit').val());
+    $('#editDepartmentModal').modal("hide");
+    fetchAllDepartments();        
+});
+  
 
 // Edit Employee Functions
 // Will be called when the editDepartmentsForm is submitted
@@ -459,18 +441,6 @@ const updateDepartmentDetails = (departmentId) => {
     });
 };
 
-// Will cancel the edit
-$('#cancelEditDepartmentButton').click((e) => {
-    e.preventDefault();
-    $('#editDepartmentForm').hide();
-    $('#departmentDetails').show();
-});
-
-// Will confirm and submit the edit
-$('#confirmEditDepartmentButton').click(() => {
-    updateDepartmentDetails(departmentDetails.id);
-});
-
 // Handle delete department
 const deleteDepartmentByID = (departmentId) => {
     $.ajax({
@@ -488,35 +458,36 @@ const deleteDepartmentByID = (departmentId) => {
 };
 
 // Will delete the department
-$('#confirmDeleteDepartment').click(() => {
-    deleteDepartmentByID(departmentDetails.id);
-});
-
-$('#deleteDepartmentButton').click(() => {
-    // Get all personnel by department to see if anyone is assigned
-    const departmentID = departmentDetails.id;
-
+$('#departmentTableBody').on('click', '.deleteDepartment', (e) => {
+    const departmentObj = JSON.parse(JSON.stringify(e.target.dataset));
+    const departmentID = departmentObj.id;
+    $('.departmentIDToDelete').val(departmentID);
     $.ajax({
-        url: 'libs/php/isDepartmentEmpty.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            departmentID: departmentID
-        },
-        success: (results) => {
-            const personnelCount = results.data[0].numberOfPersonnel;
-            // Assign employee count the number of employees to check if empty
-            if (personnelCount < 1) {  // If no employees, allow the user to delete the department
-                $('#departmentNameToDelete').html(departmentDetails.name);
-                $('#confirmDeleteDepartmentModal').modal('show');
-            } else {  // If there are employees, alert the user that department cannot be deleted while there are employees assigned
-                $('#departmentMustBeEmptyModal').modal("show");
-            }
-        }
+                url: 'libs/php/isDepartmentEmpty.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    departmentID: departmentID
+                },
+                success: (results) => {
+                    if (results.data[0].departmentCount < 1) {
+                        $('#departmentNameToRemove').html(departmentObj.department);
+                        $('#confirmDeleteDepartmentModal').modal('show'); 
+                    } else {
+                        $('#departmentNameToDelete').html(departmentObj.department);
+                        $('#employeeCountOnDept').html(results.data[0].departmentCount);
+                        $('#departmentMustBeEmptyModal').modal('show');
+                        console.log($('.departmentIDToDelete').val());
+                    }
+                    
+                }
     });
 });
 
-// start edit and view locations
+$('#confirmDeleteDepartment').click((e) => {
+    e.preventDefault();
+    deleteDepartmentByID($('.departmentIDToDelete').val());
+})
 
 const fetchAllLocations = () => {
     $.ajax({
@@ -687,8 +658,6 @@ $('#confirmDeleteLocation').click(() => {
     deleteLocationByID(locationDetails.id);
 });
 
-
-
 // Dropdown menu
 $("#dropdown").hover(function(){
     $('#createDropdownList').toggle(200)
@@ -718,6 +687,7 @@ const filterTable = (searchWord) => {
                         <td>${employee.location}</td>
                         <td>${employee.department}</td>
                         <td>${employee.email}</td>
+                        <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
                     </tr>`
                 )
             })
@@ -753,7 +723,7 @@ $('#editPersonnelModal').on('show.bs.modal', function (e) {
       id: $(e.relatedTarget).attr('data-id') // Retrieves the data-id attribute from the calling button
     },
     success: function (result) {
-            
+        console.log(result)
       const resultCode = result.status.code
       if (resultCode == 200) {
         // Update the hidden input with the employee id so that
@@ -798,10 +768,6 @@ $('#editPersonnelModal').on('show.bs.modal', function (e) {
   });
 });
 
-$('#exampleModal').on('shown.bs.modal', function () {
-  $('#firstName').focus();   
-});
-
-$('#exampleModal').on('hidden.bs.modal', function () {
-  $('#exampleForm')[0].reset();
+$('#editPersonnelModal').on('shown.bs.modal', function () {
+  $('#editFirstName').focus();   
 });

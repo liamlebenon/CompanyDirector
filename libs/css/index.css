@@ -5,6 +5,7 @@ body {
     min-width: 375px;
 }
 
+
 .navbar {
     z-index: 100;
     position: fixed;
