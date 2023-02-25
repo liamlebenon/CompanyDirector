@@ -7,6 +7,7 @@ const fetchAllEmployees = () => {
         success: (result) => {
             // Assigns each employee a row on the table
             const employees = result.data;
+            $('#tableBody').html('');
             employees.forEach(employee => {
                 const fullname = `${employee.firstName} ${employee.lastName}`;
                 $('#tableBody').append(
@@ -14,6 +15,8 @@ const fetchAllEmployees = () => {
                         <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
                         <td>${employee.location}</td>
                         <td>${employee.department}</td>
+                        <td>${employee.email}</td>
+                        <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
                     </tr>`
                 )
             })
@@ -250,6 +253,7 @@ const employeeDetails = {
     lastName: '',
     department: '',
     email: '',
+    jobTitle: '',
     location: '',
     employeeId: ''
 };
@@ -266,82 +270,12 @@ const locationDetails = {
     departments: []
 }
 
-// Select employee from table
-$('#employeeTable').click((e) => {
-    $('#employeeDetailsLoaded').css('display', 'none');
-    $('#employeeDetailsLoader').css('display', 'block');
-    const employeeId = e.target.getAttribute('userid');
-    if (employeeId !== null) {
-        $('#allEmployeesBox').hide();
-        $('#employeeInfoBox').show();
-        $('#employeeDetails').show()
-        $.ajax({
-            url: 'libs/php/getEmployeeByID.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                id: employeeId
-            },
-            success: (results) => {
-                const employee = results.data.personnel[0];
-                employeeDetails.firstName = employee.firstName;
-                employeeDetails.lastName = employee.lastName;
-                employeeDetails.department = employee.department;
-                employeeDetails.email = employee.email;
-                employeeDetails.location = employee.location;
-                employeeDetails.id = employee.employeeId;
-
-                $('#employeeName').html(`${employeeDetails.firstName} ${employeeDetails.lastName}`);
-                $('#employeePosition').html(employeeDetails.department);
-                $('#employeeEmail').html(employeeDetails.email);
-                $('#employeeLocation').html(employeeDetails.location);
-
-                $('#employeeDetailsLoader').css('display', 'none');
-                $('#employeeDetailsLoaded').css('display', 'block');
-            }
-        });
-    } 
-});
-
-// Edit employee button
-$('#editEmployee').click(() => {
-    $('#editDepartmentID').find('option').remove();
-    $.ajax({
-        url: 'libs/php/getAllDepartmentsWithLocationID.php',
-        type: 'POST',
-        dataType: 'json',
-        success: (result) => {
-            result.data.forEach(department => {
-                if (employeeDetails.department === department.name) {
-                    $('<option>', {
-                        text: department.name,
-                        value: department.id,
-                        locationId: department.locationID,
-                        selected: true
-                    }).appendTo($('#editDepartmentID'));
-                } else {
-                    $('<option>', {
-                        text: department.name,
-                        value: department.id,
-                        locationId: department.locationID
-                }).appendTo($('#editDepartmentID'));
-                }
-
-            });
-        }
-    });
-    $('#employeeDetails').hide();
-    $('#editEmployeeForm').show();
-    $('#editFirstName').val(employeeDetails.firstName);
-    $('#editLastName').val(employeeDetails.lastName);
-    $('#editEmail').val(employeeDetails.email);
-    
-});
-
 // Delete Employee Functions
-$('#deleteEmployee').click(() => {
+$('#deletePersonnelModal').on('show.bs.modal', (e) => {
     $('#confirmDeleteModal').modal("show");
-    $('#employeeNameToDelete').html(employeeDetails.firstName + ' ' + employeeDetails.lastName);
+    $('#employeeNameToDelete').html($(e.relatedTarget).attr('data-fullName'));
+    console.log($(e.relatedTarget).attr('data-id'))
+    $('#employeeIDToDelete').val($(e.relatedTarget).attr('data-id'));
 });
 
 const deleteEmployeeByID = (employeeId) => {
@@ -360,7 +294,7 @@ const deleteEmployeeByID = (employeeId) => {
 };
 
 $('#confirmDeleteEmployee').click(() => {
-    deleteEmployeeByID(employeeDetails.id);
+    deleteEmployeeByID($('#employeeIDToDelete').val());
 });
 // End Delete Employee Functions
 
@@ -368,8 +302,9 @@ $('#confirmDeleteEmployee').click(() => {
 const updateEmployeeDetails = (employeeId) => {
     const firstName = capitalize($('#editFirstName').val()).trim();
     const lastName = capitalize($('#editLastName').val()).trim();
-    const email = $('#editEmail').val().trim();
-    const departmentID = $('#editDepartmentID').val();
+    const email = $('#editEmailAddress').val().trim();
+    const departmentID = $('#editDepartment').val();
+    const jobTitle = capitalize($('#editJobTitle').val()).trim()
 
     $.ajax({
         url: 'libs/php/updateEmployeeDetails.php',
@@ -381,9 +316,11 @@ const updateEmployeeDetails = (employeeId) => {
             email: email,
             departmentID: departmentID,
             id: employeeId,
+            jobTitle: jobTitle
         },
         success: () => {
-            console.log('Employee successfully updated')
+            console.log('Employee successfully updated');
+            
             fetchAllEmployees();
         }
     });
@@ -780,6 +717,7 @@ const filterTable = (searchWord) => {
                         <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
                         <td>${employee.location}</td>
                         <td>${employee.department}</td>
+                        <td>${employee.email}</td>
                     </tr>`
                 )
             })
@@ -798,3 +736,72 @@ $(document).ready(function(){
     });    
 });
 
+
+$('#editEmployeeForm').on("submit", function(e) {
+    e.preventDefault(); 
+    updateEmployeeDetails(employeeDetails.id);
+    $('#editPersonnelModal').modal("hide");
+    fetchAllEmployees();        
+});
+  
+$('#editPersonnelModal').on('show.bs.modal', function (e) {
+    $.ajax({
+    url: "./libs/php/getPersonnelByID.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      id: $(e.relatedTarget).attr('data-id') // Retrieves the data-id attribute from the calling button
+    },
+    success: function (result) {
+            
+      const resultCode = result.status.code
+      if (resultCode == 200) {
+        // Update the hidden input with the employee id so that
+        // it can be referenced when the form is submitted
+        employeeDetails.id = result.data.personnel[0].id;
+        employeeDetails.firstName = result.data.personnel[0].firstName;
+        employeeDetails.lastName = result.data.personnel[0].lastName;
+        employeeDetails.jobTitle = result.data.personnel[0].jobTitle;
+        employeeDetails.emailAdress = result.data.personnel[0].emailAdress;
+        employeeDetails.department = result.data.personnel[0].departmentID;
+
+        console.log(departmentDetails)
+        $('#employeeID').val(result.data.personnel[0].id);
+        $('#editFirstName').val(result.data.personnel[0].firstName);
+        $('#editLastName').val(result.data.personnel[0].lastName);
+        $('#editJobTitle').val(result.data.personnel[0].jobTitle);
+        $('#editEmailAddress').val(result.data.personnel[0].email);
+        $('#editDepartment').html("");
+
+        result.data.department.forEach(department => {
+            if (employeeDetails.department == department.id) {
+                $('<option>', {
+                    text: department.name,
+                    value: department.id,
+                    selected: true
+                }).appendTo($('#editDepartment'));
+            } else {
+                $('<option>', {
+                    text: department.name,
+                    value: department.id,
+            }).appendTo($('#editDepartment'));
+            }
+
+        });
+      } else {
+        $('#exampleModal .modal-title').replaceWith("Error retrieving data");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $('#exampleModal .modal-title').replaceWith("Error retrieving data");
+    }
+  });
+});
+
+$('#exampleModal').on('shown.bs.modal', function () {
+  $('#firstName').focus();   
+});
+
+$('#exampleModal').on('hidden.bs.modal', function () {
+  $('#exampleForm')[0].reset();
+});

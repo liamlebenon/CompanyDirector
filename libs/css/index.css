@@ -9,6 +9,7 @@ body {
     z-index: 100;
     position: fixed;
     width: 100%;
+    top: 0;
 }
 .nav-item {
     margin-left: 5rem;

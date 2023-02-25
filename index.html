@@ -5,8 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">  
         <link rel="icon" href="./favicon.ico">      
         <link rel="stylesheet" href="./bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="./assets/css/fontawesome.css" />
+        <link rel="stylesheet" href="./assets/css/brands.css" />
+        <link rel="stylesheet" href="./assets/css/solid.css" />
         <link rel="stylesheet" href="./libs/css/index.css" />
-        <title>Company Director</title>  
+        <title>Company Directory</title>  
     </head>
     <body>
         
@@ -14,7 +17,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
             <div class="container">
               <a class="navbar-brand" id="companyLogoButton" href="#">
-                <h2>Company Director</h2>
+                <h2>Company Directory</h2>
               </a>
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -22,21 +25,21 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
                   <li class="nav-item">
-                    <a class="nav-link" aria-current="page" id="employeesButton" href="#"><b>Employees</b></a>                      
+                    <a class="nav-link" aria-current="page" id="employeesButton" href="#" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"><b>Employees</b></a>                      
                   </li>
                   <li class="nav-item">                 
-                      <a class="nav-link" href="#" id="editDepartmentsButton"><b>Department</b></a></li>
+                      <a class="nav-link" href="#" id="editDepartmentsButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"><b>Department</b></a></li>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#" id="editLocationsButton"><b>Location</b></a>
+                      <a class="nav-link" href="#" id="editLocationsButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"><b>Location</b></a>
                   </li>
 
                   <li class="nav-item" id="dropdown">
                     <a class="nav-link" href="#"><b>Create</b></a>
                     <ul class="dropdown-menu" id="createDropdownList" style="display: none">
-                      <li><a class="nav-link" href="#" id="createEmployeeButton">Employee</a></li>
-                      <li><a class="nav-link" href="#" id="createDepartmentButton">Department</a></li>
-                      <li><a class="nav-link" href="#" id="createLocationButton">Location</a></li>
+                      <li><a class="nav-link" href="#" id="createEmployeeButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Employee</a></li>
+                      <li><a class="nav-link" href="#" id="createDepartmentButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Department</a></li>
+                      <li><a class="nav-link" href="#" id="createLocationButton" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">Location</a></li>
                     </ul>
                   </li>
 
@@ -48,47 +51,36 @@
 
         <!-- View all users box (default view) -->
         
-        <section class="vh-100 allDivs" id="allEmployeesBox">
-          <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-lg-8 col-xl-10">
-                <div class="card text-black" style="border-radius: 25px;">
-                  <div class="card-body p-md-4">
-                    <div class="row justify-content-center">
-                      <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
-        
-                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Employees</p>
-                        <div class="input-group">
-                          <div class="form-outline">
-                            <input type="search" id="searchTable" placeholder="Search table..."class="form-control" />
-                          </div>
-                        </div>
-                        <div class="loader" id="tableLoader"></div>
-                          <div id="table" style="display: none">
-                            <table id="employeeTable" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                              <thead>
-                                <tr>
-                                  <th class="th-sm col-md-3">Name
-                                  </th>
-                                  <th class="th-sm col-md-1">Location
-                                  </th>
-                                  <th class="th-sm col-md-3">Position
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody id="tableBody">
-                              </tbody>
-                            </table>
-                            <footer>Total Employees: <span id="employeeCount"></span></footer>
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1 allDivs" id="allEmployeesBox">
+          <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Employees</p>
+          <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="searchTable" placeholder="Search table..."class="form-control" />
             </div>
           </div>
-      </section>
+          <div class="loader" id="tableLoader"></div>
+            <div id="table" style="display: none">
+              <table id="employeeTable" style='display: block; height: 75vh; overflow-y: scroll; width: 95%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th class="th-sm col-md-1">Name
+                    </th>
+                    <th class="th-sm col-md-1">Location
+                    </th>
+                    <th class="th-sm col-md-1">Position
+                    </th>
+                    <th class="th-sm col-md-2">Email
+                    </th>
+                    <th class="th-sm col-md">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+              </table>
+              <footer>Total Employees: <span id="employeeCount"></span></footer>
+            </div>
+        </div>
 
       <!-- Create new user box -->
       <section class="vh-100 allDivs" id="createNewUserBox" style="display: none">
@@ -262,7 +254,7 @@
                                           <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Location: &nbsp;</b><span id="employeeLocation" class="employeeDetails"></span></span></li>
                                       </ul>
                                       <button type="button" id="editEmployee" class="btn btn-primary">Edit Employee</button>
-                                      <button type="button" id="deleteEmployee" class="btn btn-danger">Delete Employee</button>
+                                      <button type="button" id="" class="btn btn-danger">Delete Employee</button>
                                   </div>
                               </div>
                           </div>
@@ -271,7 +263,7 @@
                 </div>  
 
                 <!-- Edit Employee Form -->
-                <div class="row justify-content-center allDivs" id="editEmployeeForm" style="display: none;">
+                <!-- <div class="row justify-content-center allDivs" id="editEmployeeForm" style="display: none;">
                   <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
                     
                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Employee</p>
@@ -317,7 +309,7 @@
                     </form>
                   
                   </div>
-                </div>
+                </div> -->
                 <!-- End of edit Employee Form-->
 
               </div>
@@ -330,15 +322,16 @@
     <!-- End of Employee Info box-->
 
     <!-- Start confirm delete modal -->
-    <div id="confirmDeleteModal" class="modal fade" tabindex="-1">
+    <div id="deletePersonnelModal" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete?</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
+          <input type="hidden" id="employeeIDToDelete">
           <div class="modal-body">
-            Are you sure you want to permanently delete <span id="employeeNameToDelete"></span>?
+            Are you sure you want to permanently remove <span id="employeeNameToDelete"></span>?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
@@ -353,40 +346,25 @@
 
 
     <!-- Start of Edit department page -->
-    <section class="vh-100 allDivs" id="allDepartmentsBox" style="display: none">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-8 col-xl-10">
-            <div class="card text-black" style="border-radius: 25px;">
-              <div class="card-body p-md-4">
-                <div class="row justify-content-center">
-                  <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
-    
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Departments</p>
-                    <div class="loader" id="departmentsLoader"></div>
-                      <div id="departmentsTable" style="display: none">
-                        <table id="departmentsTable" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                          <thead>
-                            <tr>
-                              <th class="th-sm col-md-3">Name
-                              </th>
-                              <th class="th-sm col-md-1">Location
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody id="departmentTableBody">
-                          </tbody>
-                        </table>
-                        <footer>Total Departments: <span id="departmentsCount"></span></footer>
-                      </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1 allDivs" id="allDepartmentsBox" style="display: none; width: 100%;">
+      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Departments</p>
+      <div class="loader" id="departmentsLoader"></div>
+        <div id="departmentsTable" style="display: none">
+          <table id="departmentsTable" style='display: block; height: 75vh; overflow-y: scroll; width: 95%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th class="th-sm col-md-1">Name
+                </th>
+                <th class="th-sm col-md-1">Location
+                </th>
+              </tr>
+            </thead>
+            <tbody id="departmentTableBody">
+            </tbody>
+          </table>
+          <footer>Total Departments: <span id="departmentsCount"></span></footer>
         </div>
-      </div>
-  </section>
+    </div>
     <!-- End of Edit department page -->
     
     <!-- Start of department information page -->
@@ -503,38 +481,23 @@
     <!-- End confirm delete department -->
 
     <!-- Start of Edit locations pages -->
-    <section class="vh-100 allDivs" id="allLocationsBox" style="display: none">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-8 col-xl-10" style="min-width:400px;">
-            <div class="card text-black" style="border-radius: 25px;">
-              <div class="card-body p-md-4">
-                <div class="row justify-content-center">
-                  <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
-    
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Locations</p>
-                    <div class="loader" id="locationsLoader"></div>
-                      <div id="locationsTable" style="display: none">
-                        <table id="locationsTable" style='display: block;height: 300px; overflow-y: scroll; width: 70%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                          <thead>
-                            <tr>
-                              <th class="th-sm col-md-1">Name
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody id="locationTableBody">
-                          </tbody>
-                        </table>
-                        <footer>Total Locations: <span id="locationsCount"></span></footer>
-                      </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1 allDivs" id="allLocationsBox" style="display: none; width: 100%">
+      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Locations</p>
+      <div class="loader" id="locationsLoader"></div>
+        <div id="locationsTable" style="display: none">
+          <table id="locationsTable" style='display: block; height: 75vh; overflow-y: scroll; width: 40%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th class="th-sm col-md-1">Name
+                </th>
+              </tr>
+            </thead>
+            <tbody id="locationTableBody">
+            </tbody>
+          </table>
+          <footer>Total Locations: <span id="locationsCount"></span></footer>
         </div>
-      </div>
-  </section>
+    </div>
 
       <!-- Start of location information page -->
 
@@ -726,6 +689,69 @@
     <!-- End alert user -->
 
     
+
+
+
+    <div id="editPersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  
+      <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+      <!--   that the header and footer are always on display by making the body scroll -->
+      
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+           
+        <div class="modal-content shadow"> 
+          
+          <!-- wrap the form tag around the modal-header, modal-body and modal-footer -->
+          
+          <form id="editEmployeeForm">
+            
+            <div class="modal-header">
+              <h5 class="modal-title">Edit employee</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+          
+            <div class="modal-body">
+    
+              <input type="hidden" id="employeeID">
+    
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="editFirstName" placeholder="First name" required>
+                <label for="firstName">First name</label>
+              </div>
+    
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="editLastName" placeholder="Last name" required>
+                <label for="lastName">Last name</label>
+              </div>
+              
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="editJobTitle" placeholder="Job title" required>
+                <label for="jobTitle">Job Title</label>
+              </div>          
+    
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="editEmailAddress" placeholder="Email address" required>
+                <label for="emailAddress">Email Address</label>
+              </div>    
+              
+              <div class="form-floating">
+                <select class="form-select" id="editDepartment" placeholder="Department">
+                </select>
+                <label for="department">Department</label>
+              </div>            
+    
+            </div>
+    
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+    
+          </form>
+          
+        </div>
+        
+      </div>
 
         <script type="application/javascript" src="./libs/js/jquery-2.2.3.min.js"></script>
         <script src="./bootstrap/js/bootstrap.js"></script>
