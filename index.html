@@ -141,56 +141,77 @@
           </div>
       </section>
       <!-- End of create new user box -->
-
-      <!-- Start of Create new Department box -->
-      <section class="vh-100 allDivs" id="createNewDepartmentBox" style="display: none">
-        <div class="container h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-lg-12 col-xl-8">
-              <div class="card text-black" style="border-radius: 25px;">
-                <div class="card-body p-md-5">
-                  <div class="row justify-content-center">
-                    <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
-      
-                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create Department</p>
-      
-                      <form class="mx-1 mx-md-6" method="POST" id="createNewDepartmentForm">
-      
-                        <div class="d-flex flex-row align-items-center mb-4">
-                          <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                          <div class="form-outline flex-fill mb-0">
-                            <input type="text" id="newDepartmentName" class="form-control" name="newDepartmentName" required />
-                            <label class="form-label" for="form3Example3c"><b>Department Name</b></label>
-                          </div>
-                        </div>
-                        
-                        <div class="d-flex flex-row align-items-center mb-4">
-                          <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                          <div class="form-outline flex-fill mb-0">
-                            <select id="selectDepartmentLocation" class="form-select" name="selectDepartmentLocation" required >
-                                <option selected disabled><b>Select Location</b></option>
-                            </select>
-                          </div>
-                        </div>
-      
-                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <button type="submit" id="createNewDepartmentButton" class="btn btn-primary btn-lg">Create Department</button>
-                        </div>
-      
-                      </form>
-      
-                    </div>
+      <div id="createNewDepartmentModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+                
+              <div class="modal-content shadow"> 
+                <form id="createNewDepartmentForm">
+                  
+                  <div class="modal-header">
+                    <h5 class="modal-title">Create Department</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                </div>
+                
+                  <div class="modal-body">
+        
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="newDepartmentName" placeholder="Department name" required>
+                      <label for="newDepartmentName">Department name</label>
+                    </div>
+
+                    <div class="form-floating">
+                      <select class="form-select" id="selectDepartmentLocation" placeholder="Select Location">
+                        <option selected disabled><b>Select Location</b></option>
+                      </select>
+                      <label for="selectDepartmentLocation">Location</label>
+                    </div>            
+          
+                  </div>
+        
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm myBtn">CREATE</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                  </div>
+          
+                </form>
               </div>
             </div>
           </div>
-        </div>
-    </section>
     <!-- End of create Department Box -->
 
+    
+
     <!-- Start of create Location Box -->
-    <section class="vh-100 allDivs" id="createNewLocationBox" style="display: none">
+    <div id="createNewLocationModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          
+        <div class="modal-content shadow"> 
+          <form id="createNewLocationForm">
+            
+            <div class="modal-header">
+              <h5 class="modal-title">Create Location</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+          
+            <div class="modal-body">
+  
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="newLocationName" placeholder="Location name" required>
+                <label for="newLocationName">Location name</label>
+              </div>
+              
+            </div>
+  
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-outline-secondary btn-sm myBtn">CREATE</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+    
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- <section class="vh-100 allDivs" id="createNewLocationBox" style="display: none">
       <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-lg-12 col-xl-8">
@@ -224,7 +245,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     <!-- End of create Location box-->
 
       <!-- Start of Employee Information box -->
@@ -319,7 +340,7 @@
     <!-- End of department page -->
 
     <!-- edit departments modal -->
-    <div id="editDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div id="editDepartmentModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
            
         <div class="modal-content shadow"> 
@@ -464,7 +485,7 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
             <form method="POST" id="confirmDeleteDepartmentForm">
-              <button type="submit" id="confirmDeleteDepartment" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+              <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
             </form>
           </div>
         </div>
@@ -480,7 +501,9 @@
           <table id="locationsTable" style='display: block; height: 75vh; overflow-y: scroll; width: 40%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
             <thead>
               <tr>
-                <th class="th-sm col-md-1">Name
+                <th class="th-sm col-md-8">Name
+                </th>
+                <th class="th-sm col-md-1">
                 </th>
               </tr>
             </thead>
@@ -491,88 +514,50 @@
         </div>
     </div>
 
-      <!-- Start of location information page -->
-
-      <section class="vh-100 allDivs" id="locationInfoBox" style="display: none">
-        <div class="container h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-lg-8 col-xl-10">
-              <div class="card text-black" style="border-radius: 25px;">
-                <div class="card-body p-md-4 align-middle" id="locationDetails">
-                  <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-10 col-xl-12 order-2 order-lg-1">
-      
-                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2" >Location Details</p>
-                      <div class="locationName">
-                        <p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-2" id="locationName"></p>
-                      </div>
-                      <div class="loader" id="locationDetailsLoader"></div>
-                        <div id="locationDetailsTable" style="display: none; margin-bottom: 5rem">
-                          <table id="locationDetailsTable" style='display: block;height: fit-content; max-height: 200px; overflow-y: scroll; width: 60%; margin: auto;' class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-                            <thead>
-                              <tr>
-                                <th class="th-sm col-md-1">Assigned Departments
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody id="locationDetailsTableBody">
-                            </tbody>
-                          </table>
-                          <footer>Total Departments: <span id="locationDepartmentsCount"></span></footer>
-                        </div>
-
-                          <div class="d-flex justify-content-center">
-                            <button type="button" id="editLocationButton" class="btn btn-primary">Edit Location</button>&nbsp;
-                            <button type="button" id="deleteLocationButton" class="btn btn-danger">Delete Location</button>
-                          </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- edit location form -->
-                <div class="row justify-content-center allDivs" id="editLocationForm" style="display: none;">
-                  <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
-                    
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Location</p>
-                  
-                    <form class="mx-1 mx-md-6" method="POST" id="editLocationBox">
-                    
-                      <div class="d-flex flex-row align-items-center mb-4">
-                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0" style="margin-top: 4rem">
-                          <input type="text" id="editLocationName" class="form-control" name="editLocationName" required />
-                          <label class="form-label" for="form3Example1c"><b>Location Name</b></label>
-                        </div>
-                      </div>
-
-                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <button type="submit" id="confirmLocationButton" class="btn btn-primary btn-lg">Edit Location</button>
-                        &nbsp;
-                        <button id="cancelLocationButton" class="btn btn-danger btn-lg">Cancel Edit</button>
-                      </div>
-                    
-                    </form>
-                  
-                  </div>
-                </div>
-                <!-- end of edit location form-->
-              </div>
+    <!-- start edit locations modal -->
+    <div id="editLocationModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+           
+        <div class="modal-content shadow"> 
+          <form id="editLocationForm">
+            
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Location</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+             </div>
+          
+            <div class="modal-body">
+              <input type="hidden" id="locationIDToEdit">
+  
+              <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="editLocationName" placeholder="Location Name" required>
+                <label for="departmentName">Location name</label>
+              </div>         
+    
             </div>
-          </div>
+  
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-outline-secondary btn-sm myBtn">SAVE</button>
+              <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+    
+          </form>
         </div>
-    </section>
-
-    <!-- End location info page -->
+      </div>
+    </div>
+    <!-- end edit locations modal -->
 
     <!-- Alert user departments must be empty modal -->
     <div id="locationMustBeEmptyModal" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
+            <input type="hidden" class="locationIDToDelete">
             <h5 class="modal-title" id="exampleModalLongTitle">Cannot Delete Location</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            Locations must not be assigned to any departments to delete.  Please ensure no departments are assigned to this location and try again.
+            <b><span id="locationNameToDelete"></span></b> currently has <b><span id="locationCountOnDept"></span></b> department(s) assigned to it.  Please ensure no departments are assigned to this location and try again.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -590,13 +575,14 @@
                 <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
+              <input type="hidden" id="locationIDToDelete">
               <div class="modal-body">
-                Are you sure you want to permanently delete <span id="locationNameToDelete"></span>?
+                Are you sure you want to permanently remove <b><span id="locationNameToRemove"></b></span>?
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
                 <form method="POST" id="confirmDeleteLocationForm">
-                  <button type="submit" id="confirmDeleteLocation" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
+                  <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Yes</button>
                 </form>
               </div>
             </div>
@@ -680,11 +666,8 @@
     </div>
     <!-- End alert user -->
 
-    
-
-
-
-    <div id="editPersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  
+    <div id="editPersonnelModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
            
         <div class="modal-content shadow"> 

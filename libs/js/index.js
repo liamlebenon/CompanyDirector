@@ -98,9 +98,7 @@ $('#createEmployeeButton').click(() => {
 $('#createDepartmentButton').click(() => {
     // Clears the form whenever the user opens the page
     $('#createNewDepartmentForm').trigger("reset");
-    hideAllDivs();
-    $('#createNewDepartmentBox').show();
-
+    $('#createNewDepartmentModal').modal('show');
     // Populate Location select
     // Makes sure the locations select will only be populated once
     if ($('#selectDepartmentLocation option').length === 1) {
@@ -115,7 +113,7 @@ $('#createDepartmentButton').click(() => {
                         text: location.name,
                         value: location.id,
                     }).appendTo(selectDepartmentLocation);
-                })
+                });
             }
     });
     }
@@ -160,7 +158,8 @@ $('#createNewDepartmentForm').submit((e) => {
             },
             success: () => {
                 // Updates the departments array
-                getAllDepartments();
+                fetchAllDepartments();
+                $('#createNewDepartmentModal').modal('hide');
             }
         });
     }
@@ -171,38 +170,50 @@ $('#createNewDepartmentForm').submit((e) => {
 $('#createLocationButton').click(() => {
     // Clears the form whenever the user opens the page
     $('#createNewLocationForm').trigger("reset");
-    hideAllDivs();
-    $('#createNewLocationBox').show();
+    $('#createNewLocationModal').modal('show');
 });
 
 // Submit create location
 $('#createNewLocationForm').submit((e) => {    
     // Trims and capitalizes location name
-    const locationName = capitalize($('#newLocation').val()).trim();
+    const locationName = capitalize($('#newLocationName').val()).trim();
 
     // Ensures the location does not already exist
     let dataIsOkay = true;
-    locations.forEach(location => {
-        if(locationName === location.name) {
-            $('#locationExistsModal').modal("show");
-            dataIsOkay = false;
-            e.preventDefault();
-        }
-    });
-    if (dataIsOkay) {
-        $.ajax({
-            url: 'libs/php/insertLocation.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                name: locationName
-            },
-            success: () => {
-                // updates the locations array
-                getAllLocations();
+    $.ajax({
+        url: 'libs/php/getAllLocations.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+        },
+        success: (results) => {
+            const locations = results.data;    
+            locations.forEach(location => {
+                if(locationName === location.name) {
+                    $('#locationExistsModal').modal("show");
+                    dataIsOkay = false;
+                    e.preventDefault();
+                }
+            });    
+            if (dataIsOkay) {
+                $.ajax({
+                url: 'libs/php/insertLocation.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    name: locationName
+                },
+                success: () => {
+                    // updates the locations array
+                    fetchAllLocations();
+                    $('#createNewLocationModal').modal('hide');
             }
         }); 
     }
+        }
+    }); 
+
+
 
 });
 
@@ -354,7 +365,7 @@ const fetchAllDepartments = () => {
                     `<tr>
                         <td><a href="#" class="test" departmentId=${department.departmentId}>${department.departmentName}</a></td>
                         <td>${department.locationName}</td>
-                        <td><i class="fa-solid fa-pen editDepartment" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id=${department.departmentId} data-department="${department.departmentName}" data-location=${department.locationName}></i> <i class="fa-solid fa-trash deleteDepartment" data-id=${department.departmentId} data-department="${department.departmentName}" data-bs-modal="#removeDepartmentModal  "data-location=${department.locationName}></i></td>
+                        <td><i class="fa-solid fa-pen editDepartment" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id=${department.departmentId} data-department="${department.departmentName}" data-location="${department.locationName}"></i> <i class="fa-solid fa-trash deleteDepartment" data-id=${department.departmentId} data-department="${department.departmentName}" data-bs-modal="#removeDepartmentModal" data-location="${department.locationName}"></i></td>
                     </tr>`
                 )
             })
@@ -484,7 +495,7 @@ $('#departmentTableBody').on('click', '.deleteDepartment', (e) => {
     });
 });
 
-$('#confirmDeleteDepartment').click((e) => {
+$('#confirmDeleteDepartmentForm').click((e) => {
     e.preventDefault();
     deleteDepartmentByID($('.departmentIDToDelete').val());
 })
@@ -496,10 +507,12 @@ const fetchAllLocations = () => {
         dataType: 'json',
         success: (results) => {
             const locations = results.data;
+            $('#locationTableBody').html('')
             locations.forEach(location => {
                 $('#locationTableBody').append(
                     `<tr>                      
                         <td><a href="#" class="test" locationId=${location.id}>${location.name}</a></td>   
+                        <td><i class="fa-solid fa-pen editLocation" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-id=${location.id} data-name="${location.name}"></i> <i class="fa-solid fa-trash deleteLocation" data-id=${location.id} data-location="${location.name}"></i></td>
                     </tr>`
                 )
             })
@@ -576,6 +589,32 @@ $('#locationsTable').click((e) => {
     } 
 });
 
+$('#editLocationModal').on('show.bs.modal', (e) => {
+    $.ajax({
+        url: 'libs/php/getLocationByID.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            id: $(e.relatedTarget).attr('data-id')
+        },
+        success: (results) => {
+            $('#locationIDToEdit').val(results.data[0].locationId);
+            $('#editLocationName').val(results.data[0].locationName);
+        }
+    });
+});
+
+$('#editLocationModal').on('shown.bs.modal', () => {
+    $('#editLocationName').focus()
+});
+
+$('#editLocationForm').on("submit", (e) => {
+    e.preventDefault(); 
+    updateLocationDetails($('#locationIDToEdit').val());
+    $('#editLocationModal').modal("hide");
+    fetchAllLocations();        
+});
+
 const updateLocationDetails = (locationId) => {
 
     const name = capitalize($('#editLocationName').val()).trim();
@@ -593,24 +632,6 @@ const updateLocationDetails = (locationId) => {
         }
     });
 };
-
-$('#editLocationButton').click(() => {
-    $('#locationDetails').hide();
-    $('#editLocationForm').show();
-    $('#editLocationName').val(locationDetails.name);
-});
-
-// Will cancel the edit
-$('#cancelLocationButton').click((e) => {
-    e.preventDefault();
-    $('#editLocationForm').hide();
-    $('#locationDetails').show();
-});
-
-// Will confirm and submit the edit
-$('#confirmLocationButton').click(() => {
-    updateLocationDetails(locationDetails.id);
-});
 
 // Handle delete location
 const deleteLocationByID = (locationId) => {
@@ -653,10 +674,37 @@ $('#deleteLocationButton').click(() => {
     });
 });
 
-// confirm delete button
-$('#confirmDeleteLocation').click(() => {
-    deleteLocationByID(locationDetails.id);
+$('#locationTableBody').on('click', '.deleteLocation', (e) => {
+    const locationObj = JSON.parse(JSON.stringify(e.target.dataset));
+    const locationID = locationObj.id;
+    $('.locationIDToDelete').val(locationID);
+    $.ajax({
+                url: 'libs/php/isLocationEmpty.php',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    locationID: locationID
+                },
+                success: (results) => {
+                    console.log(results);
+                    if (results.data[0].departmentCount < 1) {
+                        $('#locationNameToRemove').html(locationObj.location);
+                        $('#confirmDeleteLocationModal').modal('show'); 
+                    } else {
+                        $('#locationNameToDelete').html(locationObj.location);
+                        $('#locationCountOnDept').html(results.data[0].departmentCount);
+                        $('#locationMustBeEmptyModal').modal('show');
+                        console.log($('.locationIDToDelete').val());
+                    }
+                    
+                }
+    });
 });
+
+$('#confirmDeleteLocationForm').submit((e) => {
+    e.preventDefault();
+    deleteLocationByID($('.locationIDToDelete').val());
+})
 
 // Dropdown menu
 $("#dropdown").hover(function(){
