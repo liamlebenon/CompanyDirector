@@ -13,9 +13,10 @@ const fetchAllEmployees = () => {
                 $('#tableBody').append(
                     `<tr>
                         <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
-                        <td>${employee.location}</td>
+                        <td class='d-sm-none d-md-table-cell'>${employee.location}</td>
+                        <td>${employee.jobTitle}</td>
                         <td>${employee.department}</td>
-                        <td>${employee.email}</td>
+                        <td class="d-sm-none d-md-table-cell">${employee.email}</td>
                         <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
                     </tr>`
                 )
@@ -90,8 +91,55 @@ $('document').ready(() => {
 $('#createEmployeeButton').click(() => {
     // Clears the form whenever the user opens the page
     $('#createNewUserForm').trigger("reset");
-    hideAllDivs();
-    $('#createNewUserBox').show();
+    $('#createNewEmployeeModal').modal('show');
+    $.ajax({
+        url: 'libs/php/getAllDepartments.php',
+        type: 'POST',
+        dataType: 'json',
+        success: (results) => {
+            const departments = results.data;
+            console.log(departments)
+            departments.forEach(department => {
+                $('<option>', {
+                    text: department.departmentName,
+                    value: department.departmentId,
+                }).appendTo(selectEmployeeDepartment);
+            });
+        }
+    });
+});
+
+// Submit form button
+$('#createNewEmployeeForm').submit(() => {
+    // Clean up and capitalize form data
+    const firstName = capitalize($('#newEmployeeFirstName').val()).trim();
+    const lastName = capitalize($('#newEmployeeLastName').val()).trim();
+    const email = $('#newEmployeeEmail').val().trim();
+    const jobTitle = capitalize($('#newEmployeeJobTitle').val()).trim();
+    const departmentID = $('#selectEmployeeDepartment').val();
+
+    // Checks if a department has been selected 
+    if ($('#selectEmployeeDepartment').val() === null) {
+        $('#userDepartmentIsEmptyModal').modal('show');
+        return false;
+    } else {
+        $.ajax({
+            url: 'libs/php/insertEmployee.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                departmentID: departmentID,
+                jobTitle: jobTitle
+            },
+            success: () => {
+                fetchAllEmployees();
+                $('#createNewEmployeeModal').modal('hide');
+            }
+        })
+    }
 });
 
 // Opens the create Department page
@@ -230,36 +278,6 @@ $('#employeesButton').click(() => {
     $('#allEmployeesBox').show();
 }); 
 
-// Submit form button
-$('#createNewUserForm').submit(() => {
-    // Clean up and capitalize form data
-    const firstName = capitalize($('#userFirstName').val()).trim();
-    const lastName = capitalize($('#userLastName').val()).trim();
-    const email = $('#userEmail').val().trim();
-    const departmentID = $('#userDepartment').val();
-
-    // Checks if a department has been selected 
-    if ($('#userDepartment').val() === null) {
-        $('#userDepartmentIsEmptyModal').modal('show');
-        return false;
-    } else {
-        $.ajax({
-            url: 'libs/php/insertEmployee.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                departmentID: departmentID
-            },
-            success: () => {
-                fetchAllEmployees();
-            }
-        })
-    }
-});
-
 const employeeDetails = {
     firstName: '',
     lastName: '',
@@ -269,18 +287,6 @@ const employeeDetails = {
     location: '',
     employeeId: ''
 };
-
-const departmentDetails = {
-    id: '',
-    name: '',
-    location: ''
-};
-
-const locationDetails = {
-    id: '',
-    name: '',
-    departments: []
-}
 
 // Delete Employee Functions
 $('#deletePersonnelModal').on('show.bs.modal', (e) => {
@@ -332,7 +338,6 @@ const updateEmployeeDetails = (employeeId) => {
         },
         success: () => {
             console.log('Employee successfully updated');
-            
             fetchAllEmployees();
         }
     });
@@ -420,6 +425,10 @@ $('#editDepartmentModal').on('show.bs.modal', (e) => {
         }
     });
 });
+
+$('#editDepartmentModal').on('shown.bs.modal', () => {
+    $('#editDepartmentName').focus();
+})
 
 $('#editDepartmentForm').on("submit", function(e) {
     e.preventDefault(); 
@@ -783,7 +792,6 @@ $('#editPersonnelModal').on('show.bs.modal', function (e) {
         employeeDetails.emailAdress = result.data.personnel[0].emailAdress;
         employeeDetails.department = result.data.personnel[0].departmentID;
 
-        console.log(departmentDetails)
         $('#employeeID').val(result.data.personnel[0].id);
         $('#editFirstName').val(result.data.personnel[0].firstName);
         $('#editLastName').val(result.data.personnel[0].lastName);

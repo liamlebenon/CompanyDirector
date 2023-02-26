@@ -65,11 +65,13 @@
                   <tr>
                     <th class="th-sm col-md-1">Name
                     </th>
-                    <th class="th-sm col-md-1">Location
+                    <th class="th-sm col-md-1 d-sm-none d-md-table-cell">Location
+                    </th>                    
+                    <th class="th-sm col-md-1">Job Title
                     </th>
-                    <th class="th-sm col-md-1">Position
+                    <th class="th-sm col-md-1">Department
                     </th>
-                    <th class="th-sm col-md-2">Email
+                    <th class="th-sm col-md-1 d-sm-none d-md-table-cell">Email
                     </th>
                     <th class="th-sm col-md">
                     </th>
@@ -83,63 +85,58 @@
         </div>
 
       <!-- Create new user box -->
-      <section class="vh-100 allDivs" id="createNewUserBox" style="display: none">
-          <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-              <div class="col-lg-12 col-xl-8">
-                <div class="card text-black" style="border-radius: 25px;">
-                  <div class="card-body p-md-5">
-                    <div class="row justify-content-center">
-                      <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
-        
-                        <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create Employee</p>
-        
-                        <form class="mx-1 mx-md-6" method="POST" id="createNewUserForm">
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                            <div class="form-outline flex-fill mb-0">
-                              <input type="text" id="userFirstName" class="form-control" name="firstName" required />
-                              <label class="form-label" for="form3Example1c"><b>First Name</b></label>
-                            </div>
-                            &nbsp;
-                            <div class="form-outline flex-fill mb-0">
-                              <input type="text" id="userLastName" class="form-control" name="lastName" required />
-                              <label class="form-label" for="form3Example1c"><b>Last Name</b></label>
-                            </div>
-                          </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                            <div class="form-outline flex-fill mb-0">
-                              <input type="email" id="userEmail" class="form-control" name="email" required />
-                              <label class="form-label" for="form3Example3c"><b>Email Address</b></label>
-                            </div>
-                          </div>
-        
-                          <div class="d-flex flex-row align-items-center mb-4">
-                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                            <div class="form-outline flex-fill mb-0">
-                              <select id="userDepartment" class="form-select" name="departmentID" required >
-                                  <option selected disabled><b>Select Department</b></option>
-                              </select>
-                            </div>
-                          </div>
-        
-                          <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                            <button type="submit" id="createNewUserButton" class="btn btn-primary btn-lg">Create Employee</button>
-                          </div>
-        
-                        </form>
-        
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <div id="createNewEmployeeModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+            
+          <div class="modal-content shadow"> 
+            <form id="createNewEmployeeForm">
+              
+              <div class="modal-header">
+                <h5 class="modal-title">Create Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-            </div>
+            
+              <div class="modal-body">
+    
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newEmployeeFirstName" placeholder="First name" required>
+                  <label for="newEmployeeFirstName">First name</label>
+                </div> 
+                
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newEmployeeLastName" placeholder="Last name" required>
+                  <label for="newEmployeeLastName">Last name</label>
+                </div>    
+
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newEmployeeEmail" placeholder="Email address" required>
+                  <label for="newEmployeeEmail">Email address</label>
+                </div>   
+
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newEmployeeJobTitle" placeholder="Job title" required>
+                  <label for="newEmployeeJobTitle">Job title</label>
+                </div> 
+                
+                <div class="form-floating">
+                  <select class="form-select" id="selectEmployeeDepartment" placeholder="Select department">
+                    <option selected disabled><b>Select department</b></option>
+                  </select>
+                  <label for="selectEmployeeDepartment">Department</label>
+                </div>    
+      
+              </div>
+    
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-outline-secondary btn-sm myBtn">CREATE</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+              </div>
+      
+            </form>
           </div>
-      </section>
+        </div>
+    </div>
+  
       <!-- End of create new user box -->
       <div id="createNewDepartmentModal" class="modal fade" tabindex="-1" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
@@ -176,7 +173,7 @@
                 </form>
               </div>
             </div>
-          </div>
+        </div>
     <!-- End of create Department Box -->
 
     
@@ -199,7 +196,7 @@
                 <input type="text" class="form-control" id="newLocationName" placeholder="Location name" required>
                 <label for="newLocationName">Location name</label>
               </div>
-              
+
             </div>
   
             <div class="modal-footer">
@@ -211,84 +208,9 @@
         </div>
       </div>
     </div>
-    <!-- <section class="vh-100 allDivs" id="createNewLocationBox" style="display: none">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-12 col-xl-8">
-            <div class="card text-black" style="border-radius: 25px;">
-              <div class="card-body p-md-5">
-                <div class="row justify-content-center">
-                  <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
     
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create Location</p>
-    
-                    <form class="mx-1 mx-md-6" method="POST" id="createNewLocationForm">
-                      <br />
-                      <div class="d-flex flex-row align-items-center mb-4">
-                        <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
-                          <input type="text" id="newLocation" class="form-control" name="newLocation" required />
-                          <label class="form-label" for="form3Example3c"><b>Location Name</b></label>
-                        </div>
-                      </div>
-  
-                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <button type="submit" id="createNewLocationButton" class="btn btn-primary btn-lg">Create Location</button>
-                      </div>
-    
-                    </form>
-    
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
     <!-- End of create Location box-->
 
-      <!-- Start of Employee Information box -->
-      <section class="vh-100 allDivs" id="employeeInfoBox" style="display: none;">
-        <div class="container h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-lg-8 col-xl-10">
-              <div class="card text-black" style="border-radius: 25px;">
-                <div class="card-body p-md-4">
-                  <div class="row justify-content-center">
-                    <div class="col-md-12 col-lg-10 col-xl-12 order-1 order-lg-1"id="employeeDetails">
-                      <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Employee Details</p>
-                      <div class="loader" id="employeeDetailsLoader"></div>
-                      <div class="card card-style1 border-0" id="employeeDetailsLoaded">
-                          <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7" >
-                              <div class="row align-items-center">
-                                  <div class="col-lg-6 mb-4 mb-lg-0" id="profileImage">
-                                      <img src="./images/profileImage.png" width="250px" alt="...">
-                                  </div>
-                                  <div class="col-lg-6 px-xl-10">
-                                      <div class="employeeName">
-                                          <h3 class="h2 text-black mb-0" class="employeeDetails" id="employeeName"></h3>
-                                      </div>
-                                      <ul class="list-unstyled mb-1-9">
-                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Position: &nbsp;</b><span id="employeePosition" class="employeeDetails"></span></span></li>
-                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Email: &nbsp;</b><span id="employeeEmail" class="employeeDetails"></span></span></li>
-                                          <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Location: &nbsp;</b><span id="employeeLocation" class="employeeDetails"></span></span></li>
-                                      </ul>
-                                      <button type="button" id="editEmployee" class="btn btn-primary">Edit Employee</button>
-                                      <button type="button" id="" class="btn btn-danger">Delete Employee</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                </div>  
-              </div>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-    </section>
     <!-- End of Employee Info box-->
 
     <!-- Start confirm delete modal -->
@@ -377,78 +299,6 @@
       </div>
     </div>
     <!-- End of edit department modal -->
-    
-    <!-- Start of department information page -->
-    <section class="vh-100 allDivs" id="departmentInfoBox" style="display: none;">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-lg-8 col-xl-10">
-            <div class="card text-black" style="border-radius: 25px;">
-              <div class="card-body p-md-4">
-                <div class="row justify-content-center">
-                  <div class="col-md-12 col-lg-10 col-xl-12 order-1 order-lg-1" id="departmentDetails">
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-2">Department Details</p>
-                    <div class="loader" id="departmentDetailsLoader"></div>
-                    <div class="card card-style1 border-0" id="departmentDetailsLoaded">
-                        <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7" >
-                            <div class="row align-items-center">
-                                <div class="col-lg-12 px-xl-10 col-md-8 offset-md-4">
-                                    <div class="departmentName">
-                                        <h3 class="h2 text-black mb-0" class="departmentDetails" id="departmentName"></h3>
-                                    </div>
-                                    <ul class="list-unstyled mb-1-9">
-                                        <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600"><b>Location: &nbsp;</b><span id="departmentLocation" class="departmentDetails"></span></span></li>
-                                    </ul>
-                                    <button type="button" id="editDepartmentButton" class="btn btn-primary">Edit Department</button>
-                                    <button type="button" id="deleteDepartmentButton" class="btn btn-danger">Delete Department</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              </div>
-
-                <!-- Start of Edit department box -->
-                <div class="row justify-content-center allDivs" id="editDepartmentForm" style="display: none;">
-                  <div class="col-md-10 col-lg-6 col-xl-8 order-2 order-lg-1">
-                    
-                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Edit Department</p>
-                  
-                    <form class="mx-1 mx-md-6" method="POST" id="editDepartmentBox">
-                    
-                      <div class="d-flex flex-row align-items-center mb-4">
-                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
-                          <input type="text" id="editDepartmentName" class="form-control" name="editDepartmentName" required />
-                          <label class="form-label" for="form3Example1c"><b>Department Name</b></label>
-                        </div>
-                      </div>
-                    
-                      <div class="d-flex flex-row align-items-center mb-4">
-                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                        <div class="form-outline flex-fill mb-0">
-                          <select id="editDepartmentLocation" class="form-select" name="editDepartmentLocation" required >
-                          </select>
-                        </div>
-                      </div>
-                    
-                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                        <button type="submit" id="confirmEditDepartmentButton" class="btn btn-primary btn-lg">Edit Department</button>
-                        &nbsp;
-                        <button id="cancelEditDepartmentButton" class="btn btn-danger btn-lg">Cancel Edit</button>
-                      </div>
-                    
-                    </form>
-                  
-                  </div>
-                </div>
-  
-                <!-- End of edit department box -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Alert user departments must be empty modal -->
     <div id="departmentMustBeEmptyModal" class="modal fade" tabindex="-1">
