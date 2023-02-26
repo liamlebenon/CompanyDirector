@@ -1,4 +1,4 @@
-// Get all employees from the Database
+// Get all employees from the Databased-sm
 const fetchAllEmployees = () => {
     $.ajax({
         url: 'libs/php/getAll.php',
@@ -13,10 +13,10 @@ const fetchAllEmployees = () => {
                 $('#tableBody').append(
                     `<tr>
                         <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
-                        <td class='d-sm-none d-md-table-cell'>${employee.location}</td>
+                        <td class='d-none d-sm-none d-lg-table-cell'>${employee.location}</td>
                         <td>${employee.jobTitle}</td>
                         <td>${employee.department}</td>
-                        <td class="d-sm-none d-md-table-cell">${employee.email}</td>
+                        <td class="d-none d-sm-none d-lg-table-cell">${employee.email}</td>
                         <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
                     </tr>`
                 )
@@ -741,9 +741,10 @@ const filterTable = (searchWord) => {
                 $('#tableBody').prepend(
                     `<tr>
                         <td><a href="#" class="test" userid=${employee.employeeId}>${fullname}</a></td>
-                        <td>${employee.location}</td>
+                        <td class="d-none d-sm-none d-lg-table-cell">${employee.location}</td>
+                        <td>${employee.jobTitle}</td>
                         <td>${employee.department}</td>
-                        <td>${employee.email}</td>
+                        <td class="d-none d-sm-none d-lg-table-cell">${employee.email}</td>
                         <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
                     </tr>`
                 )
