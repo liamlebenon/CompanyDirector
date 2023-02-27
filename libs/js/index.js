@@ -17,7 +17,7 @@ const fetchAllEmployees = () => {
                         <td>${employee.jobTitle}</td>
                         <td>${employee.department}</td>
                         <td class="d-none d-sm-none d-lg-table-cell">${employee.email}</td>
-                        <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
+                        <td class="icons"><button><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></button>&nbsp;<button><i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></button></td>
                     </tr>`
                 )
             })
@@ -28,6 +28,7 @@ const fetchAllEmployees = () => {
     });
 };
 
+// populates the departments select
 const populateDepartments = () => {
     $.ajax({
         url: 'libs/php/getAllDepartmentsWithLocationID.php',
@@ -51,6 +52,7 @@ let departments;
 let firstLoad = true;
 let firstLocationsLoad = true;
 
+// Gets all locations from the DB
 const getAllLocations = () => {
     $.ajax({
         url: 'libs/php/getAllLocations.php',
@@ -63,6 +65,7 @@ const getAllLocations = () => {
 };
 getAllLocations();
 
+// Loads all departments 
 const getAllDepartments = () => {
     $.ajax({
         url: 'libs/php/getAllDepartments.php',
@@ -167,6 +170,7 @@ $('#createDepartmentButton').click(() => {
     }
 });
 
+// Helper to clear all divs
 const hideAllDivs = () => {
     $('.allDivs').hide();
 };
@@ -244,25 +248,22 @@ $('#createNewLocationForm').submit((e) => {
                 }
             });    
             if (dataIsOkay) {
-                $.ajax({
-                url: 'libs/php/insertLocation.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    name: locationName
-                },
-                success: () => {
-                    // updates the locations array
-                    fetchAllLocations();
-                    $('#createNewLocationModal').modal('hide');
+                    $.ajax({
+                    url: 'libs/php/insertLocation.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        name: locationName
+                    },
+                    success: () => {
+                        // updates the locations array
+                        fetchAllLocations();
+                        $('#createNewLocationModal').modal('hide');
+                    }
+                }); 
             }
-        }); 
     }
-        }
     }); 
-
-
-
 });
 
 
@@ -272,6 +273,7 @@ $('#companyLogoButton').click(() => {
     $('#allEmployeesBox').show();  
 }); 
 
+// Takes user to employees page
 $('#employeesButton').click(() => {
     hideAllDivs();
     fetchAllEmployees();
@@ -292,9 +294,9 @@ const employeeDetails = {
 $('#deletePersonnelModal').on('show.bs.modal', (e) => {
     $('#confirmDeleteModal').modal("show");
     $('#employeeNameToDelete').html($(e.relatedTarget).attr('data-fullName'));
-    console.log($(e.relatedTarget).attr('data-id'))
     $('#employeeIDToDelete').val($(e.relatedTarget).attr('data-id'));
 });
+
 
 const deleteEmployeeByID = (employeeId) => {
     $.ajax({
@@ -304,7 +306,7 @@ const deleteEmployeeByID = (employeeId) => {
         data: {
             id: employeeId
         },
-        success: (result) => {
+        success: () => {
             console.log('Employee Successfully deleted');
             fetchAllEmployees();
         }
@@ -347,14 +349,6 @@ $('#editUserButton').click(() => {
     updateEmployeeDetails(employeeDetails.id);
 });
 
-$('#cancelEditButton').click((e) => {
-    e.preventDefault();
-    $('#editEmployeeForm').hide();
-    $('#employeeDetails').show();
-});
-
-// End of edit employee functions
-
 // Edit department Funtions 
 const fetchAllDepartments = () => {
     $.ajax({
@@ -370,7 +364,7 @@ const fetchAllDepartments = () => {
                     `<tr>
                         <td><a href="#" class="test" departmentId=${department.departmentId}>${department.departmentName}</a></td>
                         <td>${department.locationName}</td>
-                        <td><i class="fa-solid fa-pen editDepartment" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id=${department.departmentId} data-department="${department.departmentName}" data-location="${department.locationName}"></i> <i class="fa-solid fa-trash deleteDepartment" data-id=${department.departmentId} data-department="${department.departmentName}" data-bs-modal="#removeDepartmentModal" data-location="${department.locationName}"></i></td>
+                        <td class="icons"><button><i class="fa-solid fa-pen editDepartment" data-bs-toggle="modal" data-bs-target="#editDepartmentModal" data-id=${department.departmentId} data-department="${department.departmentName}" data-location="${department.locationName}"></i></button>&nbsp;<button><i class="fa-solid fa-trash deleteDepartment" data-id=${department.departmentId} data-department="${department.departmentName}" data-bs-modal="#removeDepartmentModal" data-location="${department.locationName}"></i></button></td>
                     </tr>`
                 )
             })
@@ -381,6 +375,7 @@ const fetchAllDepartments = () => {
     }); 
 }
 
+// opens the departments page
 $('#editDepartmentsButton').click(() => {
     hideAllDivs();
     $('#allDepartmentsBox').show();
@@ -394,6 +389,7 @@ $('#editDepartmentsButton').click(() => {
 
 });
 
+// Will open the edit modal for departments
 $('#editDepartmentModal').on('show.bs.modal', (e) => {
     $('#editDepartmentLocation').find('option').remove();
 
@@ -406,6 +402,7 @@ $('#editDepartmentModal').on('show.bs.modal', (e) => {
             const currentDepartmentName = $(e.relatedTarget).attr('data-department');
             const currentLocation = $(e.relatedTarget).attr('data-location');
 
+            // Find which location is assigned to the departments and have it selected by default
             result.data.forEach(location => {
                 if (currentLocation === location.name) {
                     $('<option>', {
@@ -521,7 +518,7 @@ const fetchAllLocations = () => {
                 $('#locationTableBody').append(
                     `<tr>                      
                         <td><a href="#" class="test" locationId=${location.id}>${location.name}</a></td>   
-                        <td><i class="fa-solid fa-pen editLocation" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-id=${location.id} data-name="${location.name}"></i> <i class="fa-solid fa-trash deleteLocation" data-id=${location.id} data-location="${location.name}"></i></td>
+                        <td class="icons"><button><i class="fa-solid fa-pen editLocation" data-bs-toggle="modal" data-bs-target="#editLocationModal" data-id=${location.id} data-name="${location.name}"></i></button>&nbsp;<button><i class="fa-solid fa-trash deleteLocation" data-id=${location.id} data-location="${location.name}"></i></button></td>
                     </tr>`
                 )
             })
@@ -532,6 +529,7 @@ const fetchAllLocations = () => {
     }); 
 }
 
+// will open all locations
 $('#editLocationsButton').click(() => {
     hideAllDivs();
     console.log('works')
@@ -543,60 +541,6 @@ $('#editLocationsButton').click(() => {
     } else {
         return;
     }
-});
-
-// Select Individual location
-$('#locationsTable').click((e) => {
-    $('#locationsDetailsLoaded').css('display', 'none');
-    $('#locationsDetailsLoader').css('display', 'block');
-    const locationId = e.target.getAttribute('locationId');
-    if (locationId !== null) {
-        $('#allLocationsBox').hide();        
-        $('#locationInfoBox').show();
-        $('#locationDetails').show()
-        $.ajax({
-            url: 'libs/php/getLocationByID.php',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                id: locationId
-            },
-            success: (results) => {
-                
-                $('#locationDetailsTableBody').html('');
-                const locations = results.data;
-
-                locationDetails.name = locations[0].locationName;
-                locationDetails.id = locations[0].locationId; 
-
-                if (locations[0].departmentName === null) {
-                    $('#locationDetailsTableBody').append(
-                        `<tr>                        
-                            <td>No departments assigned to this location.</td>   
-                        </tr>`
-                    );
-                    $('#locationDetailsTable').show();
-                    $('#locationDepartmentsCount').html('0') 
-                } else {
-                    locations.forEach(location => {
-                        $('#locationDetailsTableBody').append(
-                            `<tr>                        
-                                <td><a href="#" class="test" departmentId=${location.departmentId}>${location.departmentName}</a></td>   
-                            </tr>`
-                        )
-                        locationDetails.departments.push(location.departmentName);
-                    });
-                    $('#locationDetailsTable').show();
-                    $('#locationDepartmentsCount').html(locations.length)    
-                }                    
-                $('#locationName').html(locationDetails.name);
-                $('#locationID').html(locationDetails.id);
-                $('#locationDetailsLoader').css('display', 'none');
-                $('#locationDetailsLoaded').css('display', 'block');
-                
-            }
-        });
-    } 
 });
 
 $('#editLocationModal').on('show.bs.modal', (e) => {
@@ -746,7 +690,7 @@ const filterTable = (searchWord) => {
                         <td>${employee.jobTitle}</td>
                         <td>${employee.department}</td>
                         <td class="d-none d-sm-none d-lg-table-cell">${employee.email}</td>
-                        <td><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i> <i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></td>
+                        <td class="icons"><button><i class="fa-solid fa-pen editUser" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></button>&nbsp;<button><i class="fa-solid fa-trash deleteUser" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id=${employee.employeeId} data-fullName="${employee.firstName} ${employee.lastName}"></i></button></td>
                     </tr>`
                 )
             })

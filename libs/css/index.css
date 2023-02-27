@@ -5,7 +5,6 @@ body {
     min-width: 375px;
 }
 
-
 .navbar {
     z-index: 100;
     position: fixed;
@@ -26,6 +25,19 @@ body {
     margin-bottom: 2rem !important;
 }
 
+#searchTable {
+    position: fixed;
+    width: 50%;
+}
+
+#table {
+    margin-top: 2rem;
+}
+
+table {
+  min-width: 350px;
+  height: 100vh;
+}
 
 table th {
     width: 1%;
@@ -54,11 +66,15 @@ footer {
     height: 600px;
 }
 
-#profileImage {
-    align-items: center;
-    display: flex;
-    width: 25%;
-    margin: auto;
+
+.icons {
+    white-space: nowrap;
+    text-align: center;
+}
+
+.icons button {
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .employeeDetails {
@@ -75,10 +91,6 @@ footer {
 }
 
 @media (max-width: 1224px) {
-    #profileImage {
-        display: none
-    }
-
     .card-body.p-1-9 {
         padding-top: 15%;
     }
@@ -111,9 +123,7 @@ footer {
     margin-top: 5rem !important;
   }
 
-  table {
-    min-width: 350px;
-  }
+
   .addDivs {
     min-width: 400px;
   }
@@ -121,3 +131,4 @@ footer {
   footer {
     width: fit-content
   }
+
