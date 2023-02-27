@@ -534,6 +534,7 @@ const fetchAllLocations = () => {
 
 $('#editLocationsButton').click(() => {
     hideAllDivs();
+    console.log('works')
     $('#allLocationsBox').show();
     // Ajax request to get all locations
     if (firstLocationsLoad) {
